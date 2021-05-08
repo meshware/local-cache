@@ -21,7 +21,7 @@ public abstract class AbstractStringSynchronousCache<V> extends AbstractSynchron
     /**
      * Get Sync Key local cache storage
      *
-     * @return
+     * @return LocalCache
      */
     @Override
     public LocalCache<String, String> getSyncKeyLocalCache() {

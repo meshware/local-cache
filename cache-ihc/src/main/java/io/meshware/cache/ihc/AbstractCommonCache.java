@@ -167,7 +167,7 @@ public abstract class AbstractCommonCache<K, V> implements LocalCache<K, V>, Ini
     /**
      * Create cache instance
      *
-     * @return
+     * @return Cache
      */
     private Cache<K, V> getCache() {
         if (cache == null) {

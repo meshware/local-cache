@@ -21,8 +21,7 @@ public abstract class AbstractSynchronousOffHeapCache<K, V, X> extends AbstractO
      *
      * @param key
      * @param syncValue
-     * @return
-     * @throws Exception
+     * @return V
      */
     @Override
     public V getValue(K key, X syncValue) throws Exception {

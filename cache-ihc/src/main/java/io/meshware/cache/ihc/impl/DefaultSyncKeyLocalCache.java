@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Sync key local cache
+ * Default sync key local cache implementation
  *
  * @author Zhiguo.Chen
  */

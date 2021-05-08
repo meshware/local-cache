@@ -23,7 +23,7 @@ public interface SynchronousCache<K, V, X> extends LocalCache<K, V> {
     /**
      * Get Sync Key local cache storage
      *
-     * @return
+     * @return LocalCache
      */
     LocalCache<K, X> getSyncKeyLocalCache();
 
@@ -53,8 +53,7 @@ public interface SynchronousCache<K, V, X> extends LocalCache<K, V> {
      *
      * @param key
      * @param syncValue
-     * @return
-     * @throws Exception
+     * @return V
      */
     V getValue(K key, X syncValue) throws Exception;
 
