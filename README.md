@@ -12,3 +12,8 @@ Local cache for Java applications, enhance response speed. The underlying depend
 - Support for off-heap caching, such as: ohc.
 - Support for automatic synchronization of cached data. (Synchronized secret key mode)
 
+## Requirements
+Compile requirement: JDK 8+ and Maven 3.2.5+ .
+
+## License
+LocalCache is licensed under the [Apache License 2.0](./LICENSE).
