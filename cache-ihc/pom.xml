@@ -20,9 +20,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>io.meshware</groupId>
+            <groupId>io.meshware.cache</groupId>
             <artifactId>cache-api</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
