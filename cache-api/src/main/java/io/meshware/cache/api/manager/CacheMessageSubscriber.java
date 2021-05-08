@@ -12,8 +12,8 @@ public interface CacheMessageSubscriber {
     /**
      * Add subscriber
      *
-     * @param runnable
-     * @return
+     * @param runnable thread
+     * @return CompletableFuture
      */
     CompletableFuture<Void> addSubscriber(Runnable runnable);
 }

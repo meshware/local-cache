@@ -107,8 +107,8 @@ public class KryoSerializationUtils_KryoPool<T> {
     /**
      * serialize
      *
-     * @param object
-     * @return
+     * @param object object
+     * @return byte[]
      */
     @Nullable
     public static byte[] serialize(@Nullable Object object) {
@@ -130,8 +130,9 @@ public class KryoSerializationUtils_KryoPool<T> {
     /**
      * deserialize
      *
-     * @param bytes
-     * @return
+     * @param bytes byte[]
+     * @param clazz Class
+     * @return T
      */
     @Nullable
     public static <T> T deserialize(@Nullable byte[] bytes, Class<T> clazz) {

@@ -33,7 +33,7 @@ public class RedisMessageSubscriber extends AbstractCacheSyncManager implements 
     /**
      * Init Manager
      *
-     * @return
+     * @return CompletableFuture
      */
     @Override
     public CompletableFuture<Void> initManager() {

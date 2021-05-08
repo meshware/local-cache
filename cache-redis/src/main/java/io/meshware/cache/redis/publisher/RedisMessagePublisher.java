@@ -27,10 +27,10 @@ public class RedisMessagePublisher implements CacheMessagePublisher {
     /**
      * Send discard cache message
      *
-     * @param channelName
-     * @param cacheName
-     * @param deleteKey
-     * @return
+     * @param channelName channel name
+     * @param cacheName   cache name
+     * @param deleteKey   delete key
+     * @return CompletableFuture
      */
     @Override
     public CompletableFuture<Void> sendDiscardCacheMessage(String channelName, String cacheName, String deleteKey) {

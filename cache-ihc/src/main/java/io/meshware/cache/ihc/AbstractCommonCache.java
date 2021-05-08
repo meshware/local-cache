@@ -98,7 +98,7 @@ public abstract class AbstractCommonCache<K, V> implements LocalCache<K, V>, Ini
     /**
      * Init cache
      *
-     * @param cache
+     * @param cache cache
      */
     public abstract void initCache(Cache<K, V> cache);
 
@@ -183,9 +183,9 @@ public abstract class AbstractCommonCache<K, V> implements LocalCache<K, V>, Ini
     /**
      * 缓存移除监听器
      *
-     * @param key
-     * @param value
-     * @param removalCause
+     * @param key          key
+     * @param value        value
+     * @param removalCause remove cause
      */
     public void whenRemove(@Nullable K key, @Nullable V value, @NonNull RemovalCause removalCause) {
         if (log.isInfoEnabled()) {

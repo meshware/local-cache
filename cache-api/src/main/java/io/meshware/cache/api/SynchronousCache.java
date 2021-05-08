@@ -30,8 +30,8 @@ public interface SynchronousCache<K, V, X> extends LocalCache<K, V> {
     /**
      * Check value effective or not
      *
-     * @param valueKey
-     * @param syncValue
+     * @param valueKey  valueKey
+     * @param syncValue sync value
      * @return boolean true(effective value)|false(invalid value)
      */
     default boolean effectiveCheck(K valueKey, X syncValue) {
@@ -51,18 +51,19 @@ public interface SynchronousCache<K, V, X> extends LocalCache<K, V> {
     /**
      * Get value with sync value
      *
-     * @param key
-     * @param syncValue
+     * @param key       key
+     * @param syncValue sync value
      * @return V
+     * @throws Exception exception
      */
     V getValue(K key, X syncValue) throws Exception;
 
     /**
      * Put value with sync value
      *
-     * @param key
-     * @param value
-     * @param syncValue
+     * @param key       key
+     * @param value     value
+     * @param syncValue sync value
      */
     void putValue(K key, V value, X syncValue);
 }

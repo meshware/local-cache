@@ -10,7 +10,7 @@ public interface Cache {
     /**
      * Set a name for the cache
      *
-     * @return
+     * @return name string
      */
     default String getName() {
         return this.getClass().getCanonicalName();

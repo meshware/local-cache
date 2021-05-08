@@ -19,9 +19,10 @@ public abstract class AbstractSynchronousOffHeapCache<K, V, X> extends AbstractO
     /**
      * Get value with sync value
      *
-     * @param key
-     * @param syncValue
+     * @param key       key
+     * @param syncValue sync value
      * @return V
+     * @throws Exception exception
      */
     @Override
     public V getValue(K key, X syncValue) throws Exception {
@@ -51,9 +52,9 @@ public abstract class AbstractSynchronousOffHeapCache<K, V, X> extends AbstractO
     /**
      * Put value with sync value
      *
-     * @param key
-     * @param value
-     * @param syncValue
+     * @param key       key
+     * @param value     value
+     * @param syncValue sync value
      */
     @Override
     public void putValue(K key, V value, X syncValue) {

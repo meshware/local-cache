@@ -37,7 +37,7 @@ public abstract class AbstractCacheSyncManager implements CacheMessageSubscriber
     /**
      * Init Manager
      *
-     * @return
+     * @return CompletableFuture
      */
     @PostConstruct
     public abstract CompletableFuture<Void> initManager();

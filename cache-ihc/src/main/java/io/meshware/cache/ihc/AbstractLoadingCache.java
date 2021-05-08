@@ -117,25 +117,24 @@ public abstract class AbstractLoadingCache<K, V> implements LocalCache<K, V>, In
     /**
      * Init cache
      *
-     * @param cache
+     * @param cache cache
      */
     public abstract void initCache(LoadingCache<K, V> cache);
 
     /**
      * Get Value When Expired
      *
-     * @param key
+     * @param key key
      * @return V Not null
-     * @throws Exception
+     * @throws Exception exception
      */
     protected abstract V getValueWhenExpired(K key) throws Exception;
 
     /**
      * Get value by key
      *
-     * @param key
-     * @return
-     * @throws Exception
+     * @param key key
+     * @return V
      */
     @Override
     public V getValue(K key) throws Exception {
@@ -150,8 +149,8 @@ public abstract class AbstractLoadingCache<K, V> implements LocalCache<K, V>, In
     /**
      * Put value
      *
-     * @param key
-     * @param value
+     * @param key   key
+     * @param value value
      */
     @Override
     public void putValue(K key, V value) {
@@ -161,9 +160,9 @@ public abstract class AbstractLoadingCache<K, V> implements LocalCache<K, V>, In
     /**
      * Get value and return default value if not exist
      *
-     * @param key
-     * @param defaultValue
-     * @return
+     * @param key          key
+     * @param defaultValue default value
+     * @return V
      */
     @Override
     public V getValueOrDefault(K key, V defaultValue) {
@@ -220,8 +219,8 @@ public abstract class AbstractLoadingCache<K, V> implements LocalCache<K, V>, In
     /**
      * Check if the data exists remotely
      *
-     * @param key
-     * @return
+     * @param key key
+     * @return bool
      */
     public boolean remoteContains(K key) {
         throw new UnsupportedOperationException("This operation is not supported in the current cache!");
@@ -230,7 +229,7 @@ public abstract class AbstractLoadingCache<K, V> implements LocalCache<K, V>, In
     /**
      * Create cache instance
      *
-     * @return
+     * @return LoadingCache
      */
     private LoadingCache<K, V> getCache() {
         if (cache == null) {
@@ -246,9 +245,9 @@ public abstract class AbstractLoadingCache<K, V> implements LocalCache<K, V>, In
     /**
      * 缓存移除监听器
      *
-     * @param key
-     * @param value
-     * @param removalCause
+     * @param key          key
+     * @param value        value
+     * @param removalCause remove cause
      */
     public void whenRemove(@Nullable K key, @Nullable V value, @NonNull RemovalCause removalCause) {
         if (log.isInfoEnabled()) {
@@ -260,7 +259,7 @@ public abstract class AbstractLoadingCache<K, V> implements LocalCache<K, V>, In
      * Discard cache by Spring event
      * <p>Support dependency on Spring version 4.2+ only</p>
      *
-     * @param cacheDiscardEvent
+     * @param cacheDiscardEvent cache discard event
      */
     @EventListener
     public void discardCacheByKey(CacheDiscardEvent cacheDiscardEvent) {
