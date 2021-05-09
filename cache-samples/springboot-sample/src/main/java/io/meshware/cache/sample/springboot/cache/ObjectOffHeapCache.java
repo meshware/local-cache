@@ -18,7 +18,7 @@ public class ObjectOffHeapCache extends StringKeyOffHeapCache<TestEntity> {
     /**
      * Set a name for the cache
      *
-     * @return
+     * @return cache name
      */
     @Override
     public String getName() {

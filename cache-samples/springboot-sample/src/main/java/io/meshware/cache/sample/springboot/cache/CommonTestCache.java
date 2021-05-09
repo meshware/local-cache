@@ -11,7 +11,6 @@ import java.util.concurrent.TimeUnit;
  * Description
  *
  * @author Zhiguo.Chen
- * @date 28/8/2019
  */
 @Slf4j
 @Component
@@ -20,7 +19,7 @@ public class CommonTestCache extends AbstractCommonCache<String, String> {
     /**
      * Set a name for the cache
      *
-     * @return
+     * @return cache name
      */
     @Override
     public String getName() {
@@ -40,7 +39,7 @@ public class CommonTestCache extends AbstractCommonCache<String, String> {
     /**
      * Init cache
      *
-     * @param cache
+     * @param cache cache
      */
     @Override
     public void initCache(Cache<String, String> cache) {

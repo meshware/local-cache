@@ -15,7 +15,7 @@ public class StringOffHeapCache extends StringKeyOffHeapCache<String> {
     /**
      * Set a name for the cache
      *
-     * @return
+     * @return cache name
      */
     @Override
     public String getName() {

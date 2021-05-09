@@ -20,7 +20,7 @@ public class ListOffHeapCache extends StringKeyOffHeapCache<List<TestEntity>> {
     /**
      * Set a name for the cache
      *
-     * @return
+     * @return cache name
      */
     @Override
     public String getName() {

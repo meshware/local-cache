@@ -21,7 +21,7 @@ public class SynchronousObjectOffHeapCache extends AbstractStringSynchronousOffH
     /**
      * Set a name for the cache
      *
-     * @return
+     * @return cache name
      */
     @Override
     public String getName() {
