@@ -1,8 +1,9 @@
 # LocalCache for Java
 
 [![Build](https://github.com/meshware/local-cache/actions/workflows/build.yml/badge.svg)](https://github.com/meshware/local-cache/actions/workflows/build.yml)
-![License](https://img.shields.io/badge/license-Apache--2.0-green.svg)
+![License](https://img.shields.io/github/license/meshware/local-cache.svg)
 [![Maven Central](https://img.shields.io/maven-central/v/io.meshware.cache/local-cache.svg?label=maven%20central)](https://search.maven.org/search?q=g:io.meshware.cache)
+[![Percentage of issues still open](http://isitmaintained.com/badge/open/meshware/local-cache.svg)](http://isitmaintained.com/project/meshware/local-cache "Percentage of issues still open")
 
 ## Overview
 Local cache for Java applications, enhance response speed. The underlying depends on Guava, Caffeine, OHC, etc., contains in heap and off heap support..
@@ -14,6 +15,36 @@ Local cache for Java applications, enhance response speed. The underlying depend
 
 ## Requirements
 Compile requirement: JDK 8+ and Maven 3.2.5+ .
+
+## Getting started
+
+There's a [README](https://github.com/meshware/local-cache/tree/main/cache-samples/README.md) file under `cache-sample` directory. We recommend referencing the sample in that directory by following the below-mentioned instructions:
+
+### Maven dependency
+
+```xml
+<properties>
+    <localCache.version>0.0.1</localCache.version>
+</properties>
+
+<dependencies>
+    <dependency>
+        <groupId>io.meshware.cache</groupId>
+        <artifactId>cache-ihc</artifactId>
+        <version>${localCache.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>io.meshware.cache</groupId>
+        <artifactId>cache-ohc</artifactId>
+        <version>${localCache.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>io.meshware.cache</groupId>
+        <artifactId>cache-redis</artifactId>
+        <version>${localCache.version}</version>
+    </dependency>
+</dependencies>
+```
 
 ## License
 LocalCache is licensed under the [Apache License 2.0](./LICENSE).

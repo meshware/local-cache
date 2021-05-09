@@ -44,6 +44,7 @@
         <module>cache-redis</module>
         <module>cache-ihc</module>
         <module>cache-ohc</module>
+        <module>cache-samples</module>
     </modules>
 
     <properties>
