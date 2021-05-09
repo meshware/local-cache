@@ -24,7 +24,7 @@ There's a [README](https://github.com/meshware/local-cache/tree/main/cache-sampl
 
 ```xml
 <properties>
-    <localCache.version>0.0.1</localCache.version>
+    <localCache.version>0.0.2</localCache.version>
 </properties>
 
 <dependencies>
