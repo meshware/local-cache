@@ -386,7 +386,7 @@ public abstract class AbstractOffHeapCache<K, V> implements OffHeapCache<K, V>, 
      *
      * @param capacity the new capacity
      */
-    public void setCapacity(long capacity) {
+    public void resetCapacity(long capacity) {
         cache.setCapacity(capacity);
     }
 

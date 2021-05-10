@@ -33,9 +33,8 @@ public class SynchronousObjectOffHeapCache extends AbstractStringSynchronousOffH
      */
     @Override
     public void initConfig() {
-        this.timeouts = true;
-        this.defaultTTLmillis = 300;
-        // this.capacity = 100000;
+        this.setTimeouts(true);
+        this.setDefaultTTLmillis(300);
     }
 
     @Override

@@ -30,9 +30,9 @@ public class ObjectOffHeapCache extends StringKeyOffHeapCache<TestEntity> {
      */
     @Override
     public void initConfig() {
-        this.throwOOME = true;
-        this.timeouts = true;
-        this.defaultTTLmillis = 300;
+        this.setThrowOOME(true);
+        this.setTimeouts(true);
+        this.setDefaultTTLmillis(300);
         // this.capacity = 100000;
     }
 

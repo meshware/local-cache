@@ -1,23 +1,23 @@
-# LocalCache for Java
+# 本地缓存
 
 [![Build](https://github.com/meshware/local-cache/actions/workflows/build.yml/badge.svg)](https://github.com/meshware/local-cache/actions/workflows/build.yml)
 ![License](https://img.shields.io/github/license/meshware/local-cache.svg)
 [![Maven Central](https://img.shields.io/maven-central/v/io.meshware.cache/local-cache.svg?label=maven%20central)](https://search.maven.org/search?q=g:io.meshware.cache)
 [![Percentage of issues still open](http://isitmaintained.com/badge/open/meshware/local-cache.svg)](http://isitmaintained.com/project/meshware/local-cache "Percentage of issues still open")
 
-## Overview
-Local cache for Java applications, enhance response speed. The underlying depends on Guava, Caffeine, OHC, etc., contains in heap and off heap support. To view [中文说明](./README_CN.md).
+## 概述
+为Java应用而生的本地缓存，用于提升响应速度。这是一个整合了几个缓存`轮子`的`小板车`。依赖的`轮子`包括`Guava`, `Caffeine`, `OHC`等等，提供了`堆内缓存`与`堆外缓存`的支持。查看[English Introduction](./README.md)。
 
-## Features
-- Support for in-heap caching, such as: guava, caffeine.
-- Support for off-heap caching, such as: ohc.
-- Support for automatic synchronization of cached data. (Synchronized secret key mode)
+## 特性
+- 支持堆内缓存，例如：guava，caffeine框架的特性。
+- 支持堆外缓存，例如：ohc框架的特性。
+- 支持`自动同步型缓存`的支持，同步方式采用`同步值`。
 
-## Requirements
-Compile requirement: JDK 8+ and Maven 3.2.5+ .
+## 要求
+编译要求: JDK 8+ and Maven 3.2.5+ .
 
-## Getting started
-There's a [README](./cache-samples/README.md) file under `cache-samples` directory. We recommend referencing the sample in that directory by following the below-mentioned instructions:
+## 快速入门
+缓存示例`cache-samples`目录下有一个[README](./cache-samples/README.md)。我们建议通过遵循以下说明引用该目录中的示例：
 
 ### Maven dependency
 ```xml
@@ -44,5 +44,5 @@ There's a [README](./cache-samples/README.md) file under `cache-samples` directo
 </dependencies>
 ```
 
-## License
-LocalCache is licensed under the [Apache License 2.0](./LICENSE).
+## 授权协议
+本地缓存项目遵循一下开源授权协议 [Apache License 2.0](./LICENSE).

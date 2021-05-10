@@ -27,10 +27,8 @@ public class StringOffHeapCache extends StringKeyOffHeapCache<String> {
      */
     @Override
     public void initConfig() {
-        this.timeouts = true;
-        this.defaultTTLmillis = 200;
-        // this.chunkSize = 1000;
-        // this.capacity = 671088640;
+        this.setTimeouts(true);
+        this.setDefaultTTLmillis(200);
     }
 
     @Override

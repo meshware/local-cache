@@ -32,9 +32,9 @@ public class ListOffHeapCache extends StringKeyOffHeapCache<List<TestEntity>> {
      */
     @Override
     public void initConfig() {
-        this.timeouts = true;
-        this.defaultTTLmillis = 300000;
-        this.capacity = 67108864 * 4;
+        this.setTimeouts(true);
+        this.setDefaultTTLmillis(300000);
+        this.setCapacity(67108864 * 4);
     }
 
     @Override
