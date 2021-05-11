@@ -6,6 +6,7 @@ import io.meshware.cache.ohc.serializer.ObjectSerializer;
 import io.meshware.cache.sample.springboot.entity.TestEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.caffinitas.ohc.CacheSerializer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -17,6 +18,9 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 public class SynchronousObjectOffHeapCache extends AbstractStringSynchronousOffHeapCache<TestEntity> {
+
+    @Autowired
+    private SyncPairLocalCache syncPairLocalCache;
 
     /**
      * Set a name for the cache
@@ -47,4 +51,8 @@ public class SynchronousObjectOffHeapCache extends AbstractStringSynchronousOffH
         return null;
     }
 
+    @Override
+    public LocalCache<String, String> getSyncPairLocalCache() {
+        return syncPairLocalCache;
+    }
 }

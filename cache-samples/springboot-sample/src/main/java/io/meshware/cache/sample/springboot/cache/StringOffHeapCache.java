@@ -2,7 +2,9 @@ package io.meshware.cache.sample.springboot.cache;
 
 import io.meshware.cache.ohc.StringKeyOffHeapCache;
 import io.meshware.cache.ohc.serializer.StringSerializer;
+import lombok.extern.slf4j.Slf4j;
 import org.caffinitas.ohc.CacheSerializer;
+import org.springframework.stereotype.Component;
 
 /**
  * StringOffHeapCache
@@ -10,6 +12,8 @@ import org.caffinitas.ohc.CacheSerializer;
  * @author Zhiguo.Chen
  * @version 20210219
  */
+@Slf4j
+@Component
 public class StringOffHeapCache extends StringKeyOffHeapCache<String> {
 
     /**

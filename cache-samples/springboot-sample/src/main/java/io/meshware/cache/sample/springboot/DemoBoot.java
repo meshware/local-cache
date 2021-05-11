@@ -1,6 +1,6 @@
 package io.meshware.cache.sample.springboot;
 
-import io.meshware.cache.sample.springboot.cache.CommonTestCache;
+import io.meshware.cache.sample.springboot.cache.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -19,7 +19,16 @@ public class DemoBoot {
 //        redisCache.setex("aaa", 10000, "123");
 //        log.info("Get value from redis by key={}, value={}", "aaa", redisCache.get("aaa"));
 
+        // Ordinary local cache, data can be eliminated automatically according to the strategy. such as: ttl, lru...
         CommonTestCache commonTestCache = run.getBean(CommonTestCache.class);
+        // On the basis of the ordinary cache function, data that is not in the local cache can be dynamically loaded according to the logic.
+        SyncPairLocalCache syncPairLocalCache = run.getBean(SyncPairLocalCache.class);
+        // In ordinary off-heap cache, both key and value are strings. Support data elimination strategy.
+        StringOffHeapCache stringOffHeapCache = run.getBean(StringOffHeapCache.class);
+        // In ordinary off-heap cache, key is string, value are object.
+        ObjectOffHeapCache objectOffHeapCache = run.getBean(ObjectOffHeapCache.class);
+        // In ordinary off-heap cache, key is string, value are list(array).
+        ListOffHeapCache listOffHeapCache = run.getBean(ListOffHeapCache.class);
 
         AtomicLong counter = new AtomicLong(0);
         while (true) {

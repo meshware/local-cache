@@ -4,7 +4,9 @@ import com.google.common.collect.Lists;
 import io.meshware.cache.ohc.StringKeyOffHeapCache;
 import io.meshware.cache.ohc.serializer.protostuff.ProtostuffObjectSerializer;
 import io.meshware.cache.sample.springboot.entity.TestEntity;
+import lombok.extern.slf4j.Slf4j;
 import org.caffinitas.ohc.CacheSerializer;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +17,8 @@ import java.util.List;
  * @author Zhiguo.Chen
  * @version 20210219
  */
+@Slf4j
+@Component
 public class ListOffHeapCache extends StringKeyOffHeapCache<List<TestEntity>> {
 
     /**

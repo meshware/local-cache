@@ -3,7 +3,9 @@ package io.meshware.cache.sample.springboot.cache;
 import io.meshware.cache.ohc.StringKeyOffHeapCache;
 import io.meshware.cache.ohc.serializer.protostuff.ProtostuffObjectSerializer;
 import io.meshware.cache.sample.springboot.entity.TestEntity;
+import lombok.extern.slf4j.Slf4j;
 import org.caffinitas.ohc.CacheSerializer;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
@@ -13,6 +15,8 @@ import java.util.Date;
  * @author Zhiguo.Chen
  * @version 20210219
  */
+@Slf4j
+@Component
 public class ObjectOffHeapCache extends StringKeyOffHeapCache<TestEntity> {
 
     /**
