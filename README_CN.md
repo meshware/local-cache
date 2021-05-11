@@ -6,7 +6,8 @@
 [![Percentage of issues still open](http://isitmaintained.com/badge/open/meshware/local-cache.svg)](http://isitmaintained.com/project/meshware/local-cache "Percentage of issues still open")
 
 ## 概述
-为Java应用而生的本地缓存，用于提升响应速度。这是一个整合了几个缓存`轮子`的`小板车`。依赖的`轮子`包括`Guava`, `Caffeine`, `OHC`等等，提供了`堆内缓存`与`堆外缓存`的支持。查看[English Introduction](./README.md)。
+为Java应用而生的本地缓存，用于提升响应速度。这是一个整合了几个缓存`轮子`的`小板车`。依赖的`轮子`包括`Guava`, `Caffeine`, `OHC`等等，提供了`堆内缓存`与`堆外缓存`的支持。   
+查看[English Introduction](./README.md)。
 
 ## 特性
 - 支持堆内缓存，例如：guava，caffeine框架的特性。

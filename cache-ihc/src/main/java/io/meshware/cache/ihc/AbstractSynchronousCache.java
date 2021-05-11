@@ -30,25 +30,31 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Data
 @Accessors(chain = true)
-public abstract class AbstractSynchronousCache<K, V, X> extends AbstractLoadingCache<K, V> implements SynchronousCache<K, V, X> {
+public abstract class AbstractSynchronousCache<K, V, X, Y> extends AbstractLoadingCache<K, V> implements SynchronousCache<K, V, X, Y> {
 
     /**
      * Get value with sync value
      *
-     * @param key       key
-     * @param syncValue sync value
-     * @return V
-     * @throws Exception exception
+     * @param key
+     * @param syncValue
+     * @return
+     * @throws Exception
      */
     @Override
-    public V getValue(K key, X syncValue) throws Exception {
+    public V getValueWithSyncValue(K key, Y syncValue) throws Exception {
         if (effectiveCheck(key, syncValue)) {
             return getValue(key);
         } else {
+            if (null == getSyncValueLocalCache()) {
+                if (log.isWarnEnabled()) {
+                    log.warn("该同步型缓存未提供'SyncValueLocalCache'具体实现，无法提供自动同步功能！cacheName={}", getName());
+                }
+                return getValue(key);
+            }
             synchronized (this) {
                 if (!effectiveCheck(key, syncValue)) {
                     removeValue(key);
-                    getSyncKeyLocalCache().putValue(key, syncValue);
+                    getSyncValueLocalCache().putValue(key, syncValue);
                     if (log.isInfoEnabled()) {
                         log.info("[缓存同步]数据同步Key不一致，已更新！Cache={}, Key={}, SyncValue={}", getName(), key, syncValue);
                     }
@@ -59,16 +65,43 @@ public abstract class AbstractSynchronousCache<K, V, X> extends AbstractLoadingC
     }
 
     /**
+     * Get value with sync value
+     *
+     * @param key     key
+     * @param syncKey syncKey
+     * @return V
+     * @throws Exception e
+     */
+    @Override
+    public V getValueWithSyncKey(K key, X syncKey) throws Exception {
+        if (null != getSyncPairLocalCache()) {
+            Y syncValue = getSyncPairLocalCache().getValueOrDefault(syncKey, null);
+            return getValueWithSyncValue(key, syncValue);
+        } else {
+            if (log.isWarnEnabled()) {
+                log.warn("该同步型缓存未提供'SyncPairLocalCache'具体实现，无法提供自动同步功能！cacheName={}", getName());
+            }
+            return getValue(key);
+        }
+    }
+
+    /**
      * Put value with sync value
      *
-     * @param key       key
-     * @param value     value
-     * @param syncValue sync value
+     * @param key
+     * @param value
+     * @param syncValue
      */
     @Override
     @Synchronized
-    public void putValue(K key, V value, X syncValue) {
-        getSyncKeyLocalCache().putValue(key, syncValue);
+    public void putValue(K key, V value, Y syncValue) {
+        if (null != getSyncValueLocalCache()) {
+            getSyncValueLocalCache().putValue(key, syncValue);
+        } else {
+            if (log.isWarnEnabled()) {
+                log.warn("该同步型缓存未提供'SyncValueLocalCache'具体实现，无法提供自动同步功能！cacheName={}", getName());
+            }
+        }
         putValue(key, value);
     }
 }

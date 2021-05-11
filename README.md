@@ -6,7 +6,8 @@
 [![Percentage of issues still open](http://isitmaintained.com/badge/open/meshware/local-cache.svg)](http://isitmaintained.com/project/meshware/local-cache "Percentage of issues still open")
 
 ## Overview
-Local cache for Java applications, enhance response speed. The underlying depends on Guava, Caffeine, OHC, etc., contains in heap and off heap support. To view [中文说明](./README_CN.md).
+Local cache for Java applications, enhance response speed. The underlying depends on Guava, Caffeine, OHC, etc., contains in heap and off heap support.  
+To view [中文说明](./README_CN.md).
 
 ## Features
 - Support for in-heap caching, such as: guava, caffeine.

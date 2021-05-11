@@ -23,12 +23,12 @@ import java.util.concurrent.atomic.AtomicLongFieldUpdater;
 import java.util.concurrent.locks.StampedLock;
 
 /**
- * AbstractCheckableOffHeapCache
+ * AbstractSynchronousOffHeapCache
  *
  * @author Zhiguo.Chen
  * @version 20210310
  */
-public abstract class AbstractSynchronousOffHeapCache<K, V, X> extends AbstractOffHeapCache<K, V> implements SynchronousCache<K, V, X> {
+public abstract class AbstractSynchronousOffHeapCache<K, V, X, Y> extends AbstractOffHeapCache<K, V> implements SynchronousCache<K, V, X, Y> {
 
     private final StampedLock stampedLock = new StampedLock();
 
@@ -41,7 +41,7 @@ public abstract class AbstractSynchronousOffHeapCache<K, V, X> extends AbstractO
      * @throws Exception exception
      */
     @Override
-    public V getValue(K key, X syncValue) throws Exception {
+    public V getValueWithSyncValue(K key, Y syncValue) throws Exception {
         if (effectiveCheck(key, syncValue)) {
             V v = getValue(key);
             if (Objects.nonNull(v)) {
@@ -53,7 +53,7 @@ public abstract class AbstractSynchronousOffHeapCache<K, V, X> extends AbstractO
         try {
             if (!effectiveCheck(key, syncValue)) {
                 removeValue(key);
-                getSyncKeyLocalCache().putValue(key, syncValue);
+                getSyncValueLocalCache().putValue(key, syncValue);
                 if (log.isInfoEnabled()) {
                     log.info("[OHC同步]数据同步Key不一致，已更新！Cache={}, Key={}, SyncValue={}", getName(), key, syncValue);
                 }
@@ -66,6 +66,27 @@ public abstract class AbstractSynchronousOffHeapCache<K, V, X> extends AbstractO
     }
 
     /**
+     * Get value with sync key
+     *
+     * @param key     key
+     * @param syncKey syncKey
+     * @return V
+     * @throws Exception e
+     */
+    @Override
+    public V getValueWithSyncKey(K key, X syncKey) throws Exception {
+        if (null != getSyncPairLocalCache()) {
+            Y syncValue = getSyncPairLocalCache().getValueOrDefault(syncKey, null);
+            return getValueWithSyncValue(key, syncValue);
+        } else {
+            if (log.isWarnEnabled()) {
+                log.warn("该同步型缓存未提供'SyncPairLocalCache'具体实现，无法提供自动同步功能！cacheName={}", getName());
+            }
+            return getValue(key);
+        }
+    }
+
+    /**
      * Put value with sync value
      *
      * @param key       key
@@ -73,10 +94,16 @@ public abstract class AbstractSynchronousOffHeapCache<K, V, X> extends AbstractO
      * @param syncValue sync value
      */
     @Override
-    public void putValue(K key, V value, X syncValue) {
+    public void putValue(K key, V value, Y syncValue) {
         long stamp = stampedLock.writeLock();
         try {
-            getSyncKeyLocalCache().putValue(key, syncValue);
+            if (null != getSyncValueLocalCache()) {
+                getSyncValueLocalCache().putValue(key, syncValue);
+            } else {
+                if (log.isWarnEnabled()) {
+                    log.warn("该同步型缓存未提供'SyncValueLocalCache'具体实现，无法提供自动同步功能！cacheName={}", getName());
+                }
+            }
             putValue(key, value);
         } finally {
             stampedLock.unlockWrite(stamp);

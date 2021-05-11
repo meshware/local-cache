@@ -17,7 +17,7 @@
 package io.meshware.cache.ohc;
 
 import io.meshware.cache.api.LocalCache;
-import io.meshware.cache.ihc.impl.DefaultSyncKeyLocalCache;
+import io.meshware.cache.ihc.impl.DefaultSyncValueLocalCache;
 import io.meshware.cache.ohc.serializer.StringSerializer;
 import org.caffinitas.ohc.CacheSerializer;
 
@@ -27,21 +27,31 @@ import org.caffinitas.ohc.CacheSerializer;
  * @author Zhiguo.Chen
  * @version 20210430
  */
-public abstract class AbstractStringSynchronousOffHeapCache<V> extends AbstractSynchronousOffHeapCache<String, V, String> {
+public abstract class AbstractStringSynchronousOffHeapCache<V> extends AbstractSynchronousOffHeapCache<String, V, String, String> {
 
     /**
-     * default sync key cache
+     * default sync value cache
      */
-    private LocalCache<String, String> defaultSyncKeyCache = new DefaultSyncKeyLocalCache();
+    private LocalCache<String, String> defaultSyncValueCache = new DefaultSyncValueLocalCache();
 
     /**
      * Get Sync Key local cache storage
      *
-     * @return LocalCache
+     * @return localCache
      */
     @Override
-    public LocalCache<String, String> getSyncKeyLocalCache() {
-        return defaultSyncKeyCache;
+    public LocalCache<String, String> getSyncValueLocalCache() {
+        return defaultSyncValueCache;
+    }
+
+    /**
+     * Get sync pair local cache storage
+     *
+     * @return localCache
+     */
+    @Override
+    public LocalCache<String, String> getSyncPairLocalCache() {
+        return null;
     }
 
     /**

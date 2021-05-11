@@ -17,7 +17,7 @@
 package io.meshware.cache.ihc;
 
 import io.meshware.cache.api.LocalCache;
-import io.meshware.cache.ihc.impl.DefaultSyncKeyLocalCache;
+import io.meshware.cache.ihc.impl.DefaultSyncValueLocalCache;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
@@ -30,17 +30,27 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Data
 @Accessors(chain = true)
-public abstract class AbstractStringSynchronousCache<V> extends AbstractSynchronousCache<String, V, String> {
+public abstract class AbstractStringSynchronousCache<V> extends AbstractSynchronousCache<String, V, String, String> {
 
-    private LocalCache<String, String> defaultSyncKeyCache = new DefaultSyncKeyLocalCache();
+    private LocalCache<String, String> defaultSyncValueCache = new DefaultSyncValueLocalCache();
 
     /**
-     * Get Sync Key local cache storage
+     * Get sync value local cache storage
      *
      * @return LocalCache
      */
     @Override
-    public LocalCache<String, String> getSyncKeyLocalCache() {
-        return defaultSyncKeyCache;
+    public LocalCache<String, String> getSyncValueLocalCache() {
+        return defaultSyncValueCache;
+    }
+
+    /**
+     * Get sync pair local cache storage
+     *
+     * @return localCache
+     */
+    @Override
+    public LocalCache<String, String> getSyncPairLocalCache() {
+        return null;
     }
 }

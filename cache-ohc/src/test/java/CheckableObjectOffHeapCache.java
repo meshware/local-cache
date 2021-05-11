@@ -47,7 +47,7 @@ public class CheckableObjectOffHeapCache extends AbstractStringSynchronousOffHea
      * @return
      */
     @Override
-    public LocalCache<String, String> getSyncKeyLocalCache() {
+    public LocalCache<String, String> getSyncValueLocalCache() {
         return null;
     }
 }

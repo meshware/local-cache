@@ -32,30 +32,37 @@ import java.util.Objects;
  *
  * @author Zhiguo.Chen
  */
-public interface SynchronousCache<K, V, X> extends LocalCache<K, V> {
+public interface SynchronousCache<K, V, X, Y> extends LocalCache<K, V> {
 
     Logger log = LoggerFactory.getLogger(SynchronousCache.class);
 
     /**
-     * Get Sync Key local cache storage
+     * Get sync pair local cache storage
      *
-     * @return LocalCache
+     * @return local cache
      */
-    LocalCache<K, X> getSyncKeyLocalCache();
+    LocalCache<X, Y> getSyncPairLocalCache();
+
+    /**
+     * Get sync value local cache storage
+     *
+     * @return local cache
+     */
+    LocalCache<K, Y> getSyncValueLocalCache();
 
     /**
      * Check value effective or not
      *
-     * @param valueKey  valueKey
+     * @param valueKey  value Key
      * @param syncValue sync value
      * @return boolean true(effective value)|false(invalid value)
      */
-    default boolean effectiveCheck(K valueKey, X syncValue) {
+    default boolean effectiveCheck(K valueKey, Y syncValue) {
         try {
             if (Objects.isNull(syncValue) || !StringUtils.hasText(syncValue.toString())) {
                 return true;
             }
-            if (!syncValue.equals(getSyncKeyLocalCache().getValue(valueKey))) {
+            if (!syncValue.equals(getSyncValueLocalCache().getValue(valueKey))) {
                 return false;
             }
         } catch (Exception e) {
@@ -65,21 +72,31 @@ public interface SynchronousCache<K, V, X> extends LocalCache<K, V> {
     }
 
     /**
+     * Get value with sync key
+     *
+     * @param key     key
+     * @param syncKey syncKey
+     * @return V
+     * @throws Exception e
+     */
+    V getValueWithSyncKey(K key, X syncKey) throws Exception;
+
+    /**
      * Get value with sync value
      *
      * @param key       key
-     * @param syncValue sync value
+     * @param syncValue syncValue
      * @return V
-     * @throws Exception exception
+     * @throws Exception e
      */
-    V getValue(K key, X syncValue) throws Exception;
+    V getValueWithSyncValue(K key, Y syncValue) throws Exception;
 
     /**
      * Put value with sync value
      *
      * @param key       key
      * @param value     value
-     * @param syncValue sync value
+     * @param syncValue syncValue
      */
-    void putValue(K key, V value, X syncValue);
+    void putValue(K key, V value, Y syncValue);
 }

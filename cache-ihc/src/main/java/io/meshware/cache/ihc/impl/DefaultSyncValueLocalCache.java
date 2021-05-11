@@ -29,11 +29,11 @@ import java.util.concurrent.TimeUnit;
  * @author Zhiguo.Chen
  */
 @Slf4j
-public class DefaultSyncKeyLocalCache extends AbstractCommonCache<String, String> {
+public class DefaultSyncValueLocalCache extends AbstractCommonCache<String, String> {
 
     @Override
     public String getName() {
-        return "defaultSyncKeyLocalCache";
+        return "defaultSyncValueLocalCache";
     }
 
     @Override
