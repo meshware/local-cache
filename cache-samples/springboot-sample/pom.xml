@@ -5,12 +5,12 @@
     <parent>
         <artifactId>cache-samples</artifactId>
         <groupId>io.meshware.cache</groupId>
-        <version>0.0.4</version>
+        <version>0.0.5-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>springboot-sample</artifactId>
-    <name>MeshWare :: LocalCache :: SpringBootSample</name>
+    <name>meshware-local-cache-spring-boot-sample</name>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>

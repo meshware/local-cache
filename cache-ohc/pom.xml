@@ -5,14 +5,14 @@
     <parent>
         <artifactId>local-cache</artifactId>
         <groupId>io.meshware.cache</groupId>
-        <version>0.0.4</version>
+        <version>0.0.5-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>cache-ohc</artifactId>
-    <name>MeshWare :: LocalCache :: OHC</name>
+    <name>meshware-local-cache-ohc</name>
     <description>
-        Off heap cache, not affected by JVM, do not affect GC, but have serialization and deserialization CPU losses.
+        Off heap cache, not affected by JVM, do not affect GC, but have serialization and deserialization CPU losses
     </description>
 
     <properties>

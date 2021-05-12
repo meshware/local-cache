@@ -5,12 +5,13 @@
     <parent>
         <artifactId>local-cache</artifactId>
         <groupId>io.meshware.cache</groupId>
-        <version>0.0.4</version>
+        <version>0.0.5-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>cache-redis</artifactId>
-    <name>MeshWare :: LocalCache :: Redis</name>
+    <name>meshware-local-cache-redis</name>
+    <description>The local cache component is integrated with Redis in Spring Boot</description>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
