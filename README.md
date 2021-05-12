@@ -18,7 +18,7 @@ To view [中文说明](./README_CN.md).
 Compile requirement: JDK 8+ and Maven 3.2.5+ .
 
 ## Getting started
-There's a [README](./cache-samples/README.md) file under `cache-samples` directory. We recommend referencing the sample in that directory by following the below-mentioned instructions:
+There's a [README](./cache-samples/README.md) file under [cache-samples](./cache-samples) directory. We recommend referencing the sample in that directory by following the below-mentioned instructions:
 
 ### Maven dependency
 ```xml

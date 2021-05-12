@@ -30,5 +30,9 @@
             <groupId>io.meshware.cache</groupId>
             <artifactId>cache-ohc</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+        </dependency>
     </dependencies>
 </project>

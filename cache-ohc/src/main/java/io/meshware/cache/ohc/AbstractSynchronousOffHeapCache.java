@@ -42,14 +42,20 @@ public abstract class AbstractSynchronousOffHeapCache<K, V, X, Y> extends Abstra
      */
     @Override
     public V getValueWithSyncValue(K key, Y syncValue) throws Exception {
-        if (effectiveCheck(key, syncValue)) {
-            V v = getValue(key);
-            if (Objects.nonNull(v)) {
-                return v;
+        long readLockStamp = stampedLock.readLock();
+        try {
+            if (effectiveCheck(key, syncValue)) {
+                V v = getValue(key);
+                if (Objects.nonNull(v)) {
+                    return v;
+                }
             }
+        } finally {
+            stampedLock.unlock(readLockStamp);
         }
         // boolean wasFirst = lock();
-        long stamp = stampedLock.writeLock();
+        // long stamp = stampedLock.tryConvertToWriteLock(readStamp);
+        long writeLockStamp = stampedLock.writeLock();
         try {
             if (!effectiveCheck(key, syncValue)) {
                 removeValue(key);
@@ -61,7 +67,7 @@ public abstract class AbstractSynchronousOffHeapCache<K, V, X, Y> extends Abstra
             return getWithLoader(key);
         } finally {
             // unlock(wasFirst);
-            stampedLock.unlockWrite(stamp);
+            stampedLock.unlockWrite(writeLockStamp);
         }
     }
 

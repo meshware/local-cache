@@ -63,7 +63,7 @@ public abstract class AbstractLoadingCache<K, V> implements LocalCache<K, V>, In
     /**
      * 缓存过期时间（访问后）
      */
-    protected int expireDurationAfterAccess = 1;
+    protected int expireDurationAfterAccess = -1;
 
     /**
      * 缓存刷新周期时间格式
@@ -115,7 +115,8 @@ public abstract class AbstractLoadingCache<K, V> implements LocalCache<K, V>, In
             @Override
             public V load(K key) throws Exception {
                 if (log.isInfoEnabled()) {
-                    log.info("Loading data, cache name={}, current key={}, current cache size={}, max size={}", getName(), key, cache.estimatedSize(), maxSize);
+                    log.info("Loading data, cache name={}, current key={}, current cache estimatedSize={}, max size={}",
+                            getName(), key, cache.estimatedSize(), maxSize);
                 }
                 return getValueWhenExpired(key);
             }

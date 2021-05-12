@@ -9,6 +9,9 @@ import org.caffinitas.ohc.CacheSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
+import java.util.concurrent.atomic.AtomicLong;
+
 /**
  * ObjectOffHeapCache
  *
@@ -18,6 +21,8 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 public class SynchronousObjectOffHeapCache extends AbstractStringSynchronousOffHeapCache<TestEntity> {
+
+    AtomicLong atomicInteger = new AtomicLong(0);
 
     @Autowired
     private SyncPairLocalCache syncPairLocalCache;
@@ -38,7 +43,7 @@ public class SynchronousObjectOffHeapCache extends AbstractStringSynchronousOffH
     @Override
     public void initConfig() {
         this.setTimeouts(true);
-        this.setDefaultTTLmillis(300);
+        this.setDefaultTTLmillis(30000);
     }
 
     @Override
@@ -48,7 +53,11 @@ public class SynchronousObjectOffHeapCache extends AbstractStringSynchronousOffH
 
     @Override
     public TestEntity loadData(String key) {
-        return null;
+        TestEntity entity = new TestEntity();
+        entity.setName(key);
+        entity.setCreateTime(new Date());
+        entity.setId(atomicInteger.incrementAndGet());
+        return entity;
     }
 
     @Override

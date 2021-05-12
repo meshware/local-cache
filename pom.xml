@@ -20,6 +20,10 @@
         <developer>
             <name>Zhiguo.Chen</name>
             <email>chenzhiguo@live.com</email>
+            <roles>
+                <role>admin</role>
+            </roles>
+            <organization>MeshWare</organization>
         </developer>
     </developers>
 
