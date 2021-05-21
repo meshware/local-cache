@@ -267,8 +267,8 @@ public abstract class AbstractLoadingCache<K, V> implements LocalCache<K, V>, In
      * @param removalCause remove cause
      */
     public void whenRemove(@Nullable K key, @Nullable V value, @NonNull RemovalCause removalCause) {
-        if (log.isInfoEnabled()) {
-            log.info("[RemoveCallback]Remove cache key:{}, value:{}, cause:{}, cacheName={}", key, value, removalCause, getName());
+        if (log.isDebugEnabled()) {
+            log.debug("[RemoveCallback]Remove cache key:{}, value:{}, cause:{}, cacheName={}", key, value, removalCause, getName());
         }
     }
 

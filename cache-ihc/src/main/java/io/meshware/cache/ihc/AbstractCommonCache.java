@@ -204,16 +204,16 @@ public abstract class AbstractCommonCache<K, V> implements LocalCache<K, V>, Ini
      * @param removalCause remove cause
      */
     public void whenRemove(@Nullable K key, @Nullable V value, @NonNull RemovalCause removalCause) {
-        if (log.isInfoEnabled()) {
-            log.info("[RemoveCallback]Remove cache key:{}, value:{}, cause:{}, cacheName={}", key, value, removalCause, getName());
+        if (log.isDebugEnabled()) {
+            log.debug("[RemoveCallback]Remove cache key:{}, value:{}, cause:{}, cacheName={}", key, value, removalCause, getName());
         }
     }
 
     @EventListener
     public void discardCacheByKey(CacheDiscardEvent cacheDiscardEvent) {
         CacheDiscardEntity cacheDiscard = (CacheDiscardEntity) cacheDiscardEvent.getSource();
-        if (log.isInfoEnabled()) {
-            log.info("Receive event:{}, deleteKey:{}, current cache:{}", cacheDiscard.getClass(), cacheDiscard.getDeleteKey(), this.getClass().getSimpleName());
+        if (log.isDebugEnabled()) {
+            log.debug("Receive event:{}, deleteKey:{}, current cache:{}", cacheDiscard.getClass(), cacheDiscard.getDeleteKey(), this.getClass().getSimpleName());
         }
         if (this.getName().equals(cacheDiscard.getCacheName())) {
             removeValue((K) cacheDiscard.getDeleteKey());
