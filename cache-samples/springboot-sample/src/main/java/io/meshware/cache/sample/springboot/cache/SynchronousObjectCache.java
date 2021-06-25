@@ -2,6 +2,7 @@ package io.meshware.cache.sample.springboot.cache;
 
 import com.github.benmanes.caffeine.cache.LoadingCache;
 import io.meshware.cache.api.LocalCache;
+import io.meshware.cache.api.RedisCache;
 import io.meshware.cache.ihc.AbstractStringSynchronousCache;
 import io.meshware.cache.sample.springboot.entity.TestEntity;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +28,9 @@ public class SynchronousObjectCache extends AbstractStringSynchronousCache<TestE
 
     @Autowired
     private SyncPairLocalCache syncPairLocalCache;
+
+    @Autowired
+    private RedisCache redisCache;
 
     /**
      * Init cache config
@@ -57,6 +61,7 @@ public class SynchronousObjectCache extends AbstractStringSynchronousCache<TestE
      */
     @Override
     protected TestEntity getValueWhenExpired(String key) throws Exception {
+        String aa = redisCache.get("aa");
         TestEntity entity = new TestEntity();
         entity.setName(key);
         entity.setCreateTime(new Date());
