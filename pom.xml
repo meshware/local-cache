@@ -45,9 +45,10 @@
 
     <modules>
         <module>cache-api</module>
-        <module>cache-redis</module>
         <module>cache-ihc</module>
         <module>cache-ohc</module>
+        <module>cache-redis</module>
+        <module>cache-consul</module>
         <module>cache-samples</module>
     </modules>
 
