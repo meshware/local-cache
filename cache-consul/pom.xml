@@ -24,5 +24,15 @@
             <artifactId>consul-api</artifactId>
             <version>1.4.5</version>
         </dependency>
+        <dependency>
+            <groupId>io.meshware.cache</groupId>
+            <artifactId>cache-ihc</artifactId>
+            <version>0.0.5-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>io.meshware.cache</groupId>
+            <artifactId>cache-ohc</artifactId>
+            <version>0.0.5-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 </project>

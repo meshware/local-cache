@@ -18,6 +18,7 @@ package io.meshware.cache.ihc;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
+import com.github.benmanes.caffeine.cache.Expiry;
 import com.github.benmanes.caffeine.cache.RemovalCause;
 import io.meshware.cache.api.LocalCache;
 import io.meshware.cache.api.event.CacheDiscardEntity;
@@ -33,6 +34,7 @@ import org.springframework.lang.Nullable;
 import java.util.Collection;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Supplier;
 
 /**
  * Abstract Common Cache
@@ -63,6 +65,11 @@ public abstract class AbstractCommonCache<K, V> implements LocalCache<K, V>, Ini
      * 缓存过期时间（访问后）
      */
     protected int expireDurationAfterAccess = -1;
+
+    /**
+     * 自定义数据过期策略
+     */
+    protected Supplier<Expiry<K, V>> expirySupplier;
 
     /**
      * 缓存刷新周期时间格式
@@ -96,7 +103,8 @@ public abstract class AbstractCommonCache<K, V> implements LocalCache<K, V>, Ini
      */
     private synchronized void init() {
         Caffeine<K, V> cacheBuilder = Caffeine.newBuilder().maximumSize(maxSize).removalListener(
-                (key, value, removalCause) -> whenRemove(key, value, removalCause));
+                (key, value, removalCause) -> whenRemove(key, value, removalCause)
+        );
         if (refreshDuration > 0) {
             cacheBuilder = cacheBuilder.refreshAfterWrite(refreshDuration, refreshTimeUnit);
         }
@@ -105,6 +113,9 @@ public abstract class AbstractCommonCache<K, V> implements LocalCache<K, V>, Ini
         }
         if (expireDurationAfterAccess > 0) {
             cacheBuilder = cacheBuilder.expireAfterAccess(expireDurationAfterAccess, expireTimeUnit);
+        }
+        if (null != expirySupplier) {
+            cacheBuilder = cacheBuilder.expireAfter(expirySupplier.get());
         }
         cache = cacheBuilder.build();
         //Init cache

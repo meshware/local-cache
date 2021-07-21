@@ -1,11 +1,14 @@
 package io.meshware.cache.sample.springboot.cache;
 
+import com.github.benmanes.caffeine.cache.Expiry;
 import com.github.benmanes.caffeine.cache.LoadingCache;
 import io.meshware.cache.api.LocalCache;
 import io.meshware.cache.api.RedisCache;
 import io.meshware.cache.ihc.AbstractStringSynchronousCache;
 import io.meshware.cache.sample.springboot.entity.TestEntity;
 import lombok.extern.slf4j.Slf4j;
+import org.checkerframework.checker.index.qual.NonNegative;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -13,6 +16,7 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.function.Supplier;
 
 /**
  * SynchronousObjectCache
@@ -40,6 +44,22 @@ public class SynchronousObjectCache extends AbstractStringSynchronousCache<TestE
         this.setExpireTimeUnit(TimeUnit.SECONDS);
         this.setExpireDurationAfterWrite(30);
         // this.setExpireDurationAfterAccess(30);
+        this.expirySupplier = () -> new Expiry<String, TestEntity>() {
+            @Override
+            public long expireAfterCreate(@NonNull String s, @NonNull TestEntity testEntity, long l) {
+                return 1000;
+            }
+
+            @Override
+            public long expireAfterUpdate(@NonNull String s, @NonNull TestEntity testEntity, long l, @NonNegative long l1) {
+                return 1000;
+            }
+
+            @Override
+            public long expireAfterRead(@NonNull String s, @NonNull TestEntity testEntity, long l, @NonNegative long l1) {
+                return 1000;
+            }
+        };
     }
 
     /**
@@ -53,7 +73,7 @@ public class SynchronousObjectCache extends AbstractStringSynchronousCache<TestE
     }
 
     /**
-     * Get Value When Expired
+     * Get Value when Expired
      *
      * @param key key
      * @return V Not null

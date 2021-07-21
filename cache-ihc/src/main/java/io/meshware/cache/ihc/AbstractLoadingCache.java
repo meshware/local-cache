@@ -16,10 +16,7 @@
  */
 package io.meshware.cache.ihc;
 
-import com.github.benmanes.caffeine.cache.CacheLoader;
-import com.github.benmanes.caffeine.cache.Caffeine;
-import com.github.benmanes.caffeine.cache.LoadingCache;
-import com.github.benmanes.caffeine.cache.RemovalCause;
+import com.github.benmanes.caffeine.cache.*;
 import io.meshware.cache.api.LocalCache;
 import io.meshware.cache.api.event.CacheDiscardEntity;
 import io.meshware.cache.api.event.CacheDiscardEvent;
@@ -34,6 +31,7 @@ import org.springframework.lang.Nullable;
 import java.util.Collection;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Supplier;
 
 /**
  * Abstract Loading Cache
@@ -64,6 +62,11 @@ public abstract class AbstractLoadingCache<K, V> implements LocalCache<K, V>, In
      * 缓存过期时间（访问后）
      */
     protected int expireDurationAfterAccess = -1;
+
+    /**
+     * 自定义数据过期策略
+     */
+    protected Supplier<Expiry<K, V>> expirySupplier;
 
     /**
      * 缓存刷新周期时间格式
@@ -101,7 +104,8 @@ public abstract class AbstractLoadingCache<K, V> implements LocalCache<K, V>, In
      */
     private synchronized void init() {
         Caffeine<K, V> cacheBuilder = Caffeine.newBuilder().maximumSize(maxSize).removalListener(
-                (key, value, removalCause) -> whenRemove(key, value, removalCause));
+                (key, value, removalCause) -> whenRemove(key, value, removalCause)
+        );
         if (refreshDuration > 0) {
             cacheBuilder = cacheBuilder.refreshAfterWrite(refreshDuration, refreshTimeUnit);
         }
@@ -110,6 +114,9 @@ public abstract class AbstractLoadingCache<K, V> implements LocalCache<K, V>, In
         }
         if (expireDurationAfterAccess > 0) {
             cacheBuilder = cacheBuilder.expireAfterAccess(expireDurationAfterAccess, expireTimeUnit);
+        }
+        if (null != expirySupplier) {
+            cacheBuilder = cacheBuilder.expireAfter(expirySupplier.get());
         }
         cache = cacheBuilder.build(new CacheLoader<K, V>() {
             @Override
@@ -123,8 +130,10 @@ public abstract class AbstractLoadingCache<K, V> implements LocalCache<K, V>, In
 
             @Override
             public V reload(final K key, V oldValue) throws Exception {
-                log.info("Refresh data in cache, key={}", key);
-                return getValueWhenExpired(key);
+                if (log.isInfoEnabled()) {
+                    log.info("Refresh data in cache, key={}, value={}", key, oldValue);
+                }
+                return getValueWhenRefresh(key, oldValue);
             }
         });
         //Init cache
@@ -139,13 +148,25 @@ public abstract class AbstractLoadingCache<K, V> implements LocalCache<K, V>, In
     public abstract void initCache(LoadingCache<K, V> cache);
 
     /**
-     * Get Value When Expired
+     * Get data when old data expired
      *
      * @param key key
      * @return V Not null
      * @throws Exception exception
      */
     protected abstract V getValueWhenExpired(K key) throws Exception;
+
+    /**
+     * Get data when the refresh event occurs
+     *
+     * @param key      Key
+     * @param oldValue Old value
+     * @return V Not null
+     * @throws Exception exception
+     */
+    protected V getValueWhenRefresh(K key, V oldValue) throws Exception {
+        return oldValue;
+    }
 
     /**
      * Get value by key
