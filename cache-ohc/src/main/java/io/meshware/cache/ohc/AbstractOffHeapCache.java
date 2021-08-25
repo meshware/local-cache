@@ -25,6 +25,7 @@ import org.springframework.beans.factory.InitializingBean;
 
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.function.Supplier;
 
 /**
  * Abstract Off Heap Cache
@@ -230,6 +231,13 @@ public abstract class AbstractOffHeapCache<K, V> implements OffHeapCache<K, V>, 
         return cache.get(key);
     }
 
+    /**
+     * Get value and return default value if not exist
+     *
+     * @param key          key
+     * @param defaultValue default value
+     * @return V
+     */
     @Override
     public V getValueOrDefault(K key, V defaultValue) {
         V value = getValue(key);
@@ -237,6 +245,24 @@ public abstract class AbstractOffHeapCache<K, V> implements OffHeapCache<K, V>, 
             return defaultValue;
         } else {
             return value;
+        }
+    }
+
+    /**
+     * Get value and return default value if not exist
+     *
+     * @param key                  key
+     * @param defaultValueSupplier default value supplier
+     * @return V
+     */
+    @Override
+    public V getValueOrSupplier(K key, Supplier<V> defaultValueSupplier) {
+        try {
+            V result = getValue(key);
+            return result == null ? defaultValueSupplier.get() : result;
+        } catch (Exception e) {
+            log.error("从内存缓存中获取内容时发生异常，key: " + key, e);
+            return defaultValueSupplier.get();
         }
     }
 

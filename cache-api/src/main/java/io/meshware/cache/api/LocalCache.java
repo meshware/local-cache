@@ -18,6 +18,7 @@ package io.meshware.cache.api;
 
 import java.util.Collection;
 import java.util.Set;
+import java.util.function.Supplier;
 
 /**
  * Local cache interface
@@ -26,9 +27,31 @@ import java.util.Set;
  */
 public interface LocalCache<K, V> extends Cache {
 
+    /**
+     * Get value by key
+     *
+     * @param key key
+     * @return V
+     */
     V getValue(K key) throws Exception;
 
+    /**
+     * Get value and return default value if not exist
+     *
+     * @param key          key
+     * @param defaultValue default value
+     * @return V
+     */
     V getValueOrDefault(K key, V defaultValue);
+
+    /**
+     * Get value and return default value if not exist
+     *
+     * @param key                  key
+     * @param defaultValueSupplier default value supplier
+     * @return V
+     */
+    V getValueOrSupplier(K key, Supplier<V> defaultValueSupplier);
 
     void putValue(K key, V value);
 

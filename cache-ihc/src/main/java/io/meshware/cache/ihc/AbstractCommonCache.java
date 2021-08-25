@@ -150,6 +150,24 @@ public abstract class AbstractCommonCache<K, V> implements LocalCache<K, V>, Ini
         }
     }
 
+    /**
+     * Get value and return default value if not exist
+     *
+     * @param key                  key
+     * @param defaultValueSupplier default value supplier
+     * @return V
+     */
+    @Override
+    public V getValueOrSupplier(K key, Supplier<V> defaultValueSupplier) {
+        try {
+            V result = getValue(key);
+            return result == null ? defaultValueSupplier.get() : result;
+        } catch (Exception e) {
+            log.error("从内存缓存中获取内容时发生异常，key: " + key, e);
+            return defaultValueSupplier.get();
+        }
+    }
+
     @Override
     public void removeValue(K key) {
         if (log.isInfoEnabled()) {
