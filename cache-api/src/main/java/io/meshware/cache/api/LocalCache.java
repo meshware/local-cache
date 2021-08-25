@@ -33,7 +33,7 @@ public interface LocalCache<K, V> extends Cache {
      * @param key key
      * @return V
      */
-    V getValue(K key) throws Exception;
+    V getValue(K key);
 
     /**
      * Get value and return default value if not exist

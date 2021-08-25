@@ -175,13 +175,8 @@ public abstract class AbstractLoadingCache<K, V> implements LocalCache<K, V>, In
      * @return V
      */
     @Override
-    public V getValue(K key) throws Exception {
-        try {
-            return getCache().get(key);
-        } catch (Exception e) {
-            log.error("从内存缓存中获取内容时发生异常，key: " + key, e);
-            throw e;
-        }
+    public V getValue(K key) {
+        return getCache().get(key);
     }
 
     /**
