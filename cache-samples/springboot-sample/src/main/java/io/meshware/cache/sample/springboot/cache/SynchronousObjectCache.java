@@ -14,9 +14,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.function.Supplier;
 
 /**
  * SynchronousObjectCache
@@ -81,6 +79,23 @@ public class SynchronousObjectCache extends AbstractStringSynchronousCache<TestE
      */
     @Override
     protected TestEntity getValueWhenExpired(String key) throws Exception {
+        return getValueWhenRefresh(key, null);
+    }
+
+    /**
+     * Get data when the refresh event occurs
+     * <p>
+     * By this method, valid data delay can be completed,
+     * Note that {@code ExpireDurationAfterWrite} and {@code ExpireDurationAfterRead} cannot be set.
+     * </p>
+     *
+     * @param key      Key
+     * @param oldValue Old value
+     * @return V Not null
+     * @throws Exception exception
+     */
+    @Override
+    protected TestEntity getValueWhenRefresh(String key, TestEntity oldValue) throws Exception {
         String aa = redisCache.get("aa");
         TestEntity entity = new TestEntity();
         entity.setName(key);
