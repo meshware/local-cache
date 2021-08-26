@@ -141,13 +141,8 @@ public abstract class AbstractCommonCache<K, V> implements LocalCache<K, V>, Ini
 
     @Override
     public V getValueOrDefault(K key, V defaultValue) {
-        try {
-            V result = getValue(key);
-            return result == null ? defaultValue : result;
-        } catch (Exception e) {
-            log.error("从内存缓存中获取内容时发生异常，key: " + key, e);
-            return defaultValue;
-        }
+        V result = getValue(key);
+        return result == null ? defaultValue : result;
     }
 
     /**
@@ -159,13 +154,12 @@ public abstract class AbstractCommonCache<K, V> implements LocalCache<K, V>, Ini
      */
     @Override
     public V getValueOrSupplier(K key, Supplier<V> defaultValueSupplier) {
-        try {
-            V result = getValue(key);
-            return result == null ? defaultValueSupplier.get() : result;
-        } catch (Exception e) {
-            log.error("从内存缓存中获取内容时发生异常，key: " + key, e);
-            return defaultValueSupplier.get();
+        V result = getValue(key);
+        if (result == null) {
+            result = defaultValueSupplier.get();
+            putValue(key, result);
         }
+        return result;
     }
 
     @Override

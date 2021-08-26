@@ -51,7 +51,7 @@ public class DefaultSyncValueLocalCache extends AbstractCommonCache<String, Stri
     @Override
     public void whenRemove(String key, String value, RemovalCause removalCause) {
         if (removalCause == RemovalCause.SIZE || removalCause == RemovalCause.COLLECTED) {
-            log.error("缓存失效！失效原因：{}, 缓存：{}", removalCause.toString(), getName());
+            log.error("缓存失效！失效原因：{}, 缓存：{}", removalCause, getName());
         }
         super.whenRemove(key, value, removalCause);
     }

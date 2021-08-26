@@ -27,7 +27,8 @@ import org.caffinitas.ohc.CacheSerializer;
  * @author Zhiguo.Chen
  * @version 20210430
  */
-public abstract class AbstractStringSynchronousOffHeapCache<V> extends AbstractSynchronousOffHeapCache<String, V, String, String> {
+public abstract class AbstractStringSynchronousOffHeapCache<V>
+        extends AbstractSynchronousOffHeapCache<String, V, String, String> {
 
     /**
      * default sync value cache

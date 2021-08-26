@@ -28,7 +28,8 @@ import java.util.concurrent.locks.StampedLock;
  * @author Zhiguo.Chen
  * @version 20210310
  */
-public abstract class AbstractSynchronousOffHeapCache<K, V, X, Y> extends AbstractOffHeapCache<K, V> implements SynchronousCache<K, V, X, Y> {
+public abstract class AbstractSynchronousOffHeapCache<K, V, X, Y> extends AbstractOffHeapCache<K, V>
+        implements SynchronousCache<K, V, X, Y> {
 
     private final StampedLock stampedLock = new StampedLock();
 

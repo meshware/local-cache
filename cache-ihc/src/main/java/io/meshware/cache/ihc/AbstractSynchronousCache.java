@@ -30,7 +30,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Data
 @Accessors(chain = true)
-public abstract class AbstractSynchronousCache<K, V, X, Y> extends AbstractLoadingCache<K, V> implements SynchronousCache<K, V, X, Y> {
+public abstract class AbstractSynchronousCache<K, V, X, Y> extends AbstractLoadingCache<K, V>
+        implements SynchronousCache<K, V, X, Y> {
 
     /**
      * Get value with sync value
