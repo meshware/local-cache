@@ -1,9 +1,10 @@
-import com.google.common.collect.Lists;
 import io.meshware.cache.ohc.StringKeyOffHeapCache;
 import io.meshware.cache.ohc.serializer.protostuff.ProtostuffObjectSerializer;
+import org.assertj.core.util.Lists;
 import org.caffinitas.ohc.CacheSerializer;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -31,7 +32,7 @@ public class ListOffHeapCache extends StringKeyOffHeapCache<List<TestEntity>> {
     public void initConfig() {
         this.timeouts = true;
         this.defaultTTLmillis = 300000;
-        this.capacity = 67108864 * 4;
+        this.capacity = 67108864 * 4 / 1000;
     }
 
     @Override
@@ -43,6 +44,10 @@ public class ListOffHeapCache extends StringKeyOffHeapCache<List<TestEntity>> {
 
     @Override
     public List<TestEntity> loadData(String key) {
-        return Lists.newCopyOnWriteArrayList();
+        TestEntity entity1 = TestEntity.builder().id(100000L).name("test1").createTime(new Date()).age(20).build();
+        TestEntity entity2 = TestEntity.builder().id(100001L).name("test2").createTime(new Date()).age(21).build();
+        TestEntity entity3 = TestEntity.builder().id(100002L).name("test3").createTime(new Date()).age(22).build();
+        ArrayList<TestEntity> list = Lists.newArrayList(entity1, entity2, entity3);
+        return list;
     }
 }
