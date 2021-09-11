@@ -28,7 +28,7 @@ import java.util.function.Supplier;
 public interface LocalCache<K, V> extends Cache {
 
     /**
-     * Get value by key
+     * Get value by key.
      *
      * @param key key
      * @return V
@@ -36,7 +36,7 @@ public interface LocalCache<K, V> extends Cache {
     V getValue(K key);
 
     /**
-     * Get value and return default value if not exist
+     * Get value and return default value if not exist.
      *
      * @param key          key
      * @param defaultValue default value
@@ -45,7 +45,7 @@ public interface LocalCache<K, V> extends Cache {
     V getValueOrDefault(K key, V defaultValue);
 
     /**
-     * Get value and return default value if not exist
+     * Get value and return default value if not exist.
      *
      * @param key                  key
      * @param defaultValueSupplier default value supplier
@@ -53,10 +53,24 @@ public interface LocalCache<K, V> extends Cache {
      */
     V getValueOrSupplier(K key, Supplier<V> defaultValueSupplier);
 
+    /**
+     * Put value into cache.
+     *
+     * @param key   key
+     * @param value value
+     */
     void putValue(K key, V value);
 
+    /**
+     * Remove value from cache by key.
+     *
+     * @param key key
+     */
     void removeValue(K key);
 
+    /**
+     * Remove all the data immediately.
+     */
     void removeAll();
 
     void cleanUp();
