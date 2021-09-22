@@ -213,9 +213,11 @@ public abstract class AbstractLoadingCache<K, V> implements LocalCache<K, V>, In
     @Override
     public V getValueOrSupplier(K key, Supplier<V> defaultValueSupplier) {
         V result = getValue(key);
-        if (result == null) {
-            result = defaultValueSupplier.get();
-            putValue(key, result);
+        synchronized (this) {
+            if (null == getValue(key)) {
+                result = defaultValueSupplier.get();
+                putValue(key, result);
+            }
         }
         return result;
     }

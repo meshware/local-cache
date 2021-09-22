@@ -258,9 +258,11 @@ public abstract class AbstractOffHeapCache<K, V> implements OffHeapCache<K, V>, 
     @Override
     public V getValueOrSupplier(K key, Supplier<V> defaultValueSupplier) {
         V result = getValue(key);
-        if (result == null) {
-            result = defaultValueSupplier.get();
-            putValue(key, result);
+        synchronized (this) {
+            if (null == getValue(key)) {
+                result = defaultValueSupplier.get();
+                putValue(key, result);
+            }
         }
         return result;
     }
