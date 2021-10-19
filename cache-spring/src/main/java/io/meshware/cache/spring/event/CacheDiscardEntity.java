@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.meshware.cache.api.event;
+package io.meshware.cache.spring.event;
 
 import com.alibaba.fastjson.JSON;
 import lombok.AllArgsConstructor;

@@ -18,16 +18,11 @@ package io.meshware.cache.ihc;
 
 import com.github.benmanes.caffeine.cache.*;
 import io.meshware.cache.api.LocalCache;
-import io.meshware.cache.api.event.CacheDiscardEntity;
-import io.meshware.cache.api.event.CacheDiscardEvent;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.context.event.EventListener;
-import org.springframework.lang.NonNull;
-import org.springframework.lang.Nullable;
 
+import javax.annotation.PostConstruct;
 import java.util.Collection;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -41,7 +36,7 @@ import java.util.function.Supplier;
 @Slf4j
 @Data
 @Accessors(chain = true)
-public abstract class AbstractLoadingCache<K, V> implements LocalCache<K, V>, InitializingBean {
+public abstract class AbstractLoadingCache<K, V> implements LocalCache<K, V> {
 
     /**
      * 缓存自动刷新周期
@@ -88,7 +83,7 @@ public abstract class AbstractLoadingCache<K, V> implements LocalCache<K, V>, In
      */
     private volatile LoadingCache<K, V> cache = null;
 
-    @Override
+    @PostConstruct
     public void afterPropertiesSet() throws Exception {
         initConfig();
         init();
@@ -102,7 +97,7 @@ public abstract class AbstractLoadingCache<K, V> implements LocalCache<K, V>, In
     /**
      * Init cache instance
      */
-    private synchronized void init() {
+    protected synchronized void init() {
         Caffeine<K, V> cacheBuilder = Caffeine.newBuilder().maximumSize(maxSize).removalListener(
                 (key, value, removalCause) -> whenRemove(key, value, removalCause)
         );
@@ -296,26 +291,9 @@ public abstract class AbstractLoadingCache<K, V> implements LocalCache<K, V>, In
      * @param value        value
      * @param removalCause remove cause
      */
-    public void whenRemove(@Nullable K key, @Nullable V value, @NonNull RemovalCause removalCause) {
+    public void whenRemove(K key, V value, RemovalCause removalCause) {
         if (log.isDebugEnabled()) {
             log.debug("[RemoveCallback]Remove cache key:{}, value:{}, cause:{}, cacheName={}", key, value, removalCause, getName());
-        }
-    }
-
-    /**
-     * Discard cache by Spring event
-     * <p>Support dependency on Spring version 4.2+ only</p>
-     *
-     * @param cacheDiscardEvent cache discard event
-     */
-    @EventListener
-    public void discardCacheByKey(CacheDiscardEvent cacheDiscardEvent) {
-        CacheDiscardEntity cacheDiscard = (CacheDiscardEntity) cacheDiscardEvent.getSource();
-        if (log.isDebugEnabled()) {
-            log.debug("Receive event:{}, deleteKey:{}, current cache:{}", cacheDiscard.getClass(), cacheDiscard.getDeleteKey(), this.getClass().getSimpleName());
-        }
-        if (this.getName().equals(cacheDiscard.getCacheName())) {
-            removeValue((K) cacheDiscard.getDeleteKey());
         }
     }
 

@@ -14,11 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.meshware.cache.api.manager;
+package io.meshware.cache.spring.manager;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
-import io.meshware.cache.api.event.CacheDiscardEntity;
-import io.meshware.cache.api.event.CacheDiscardEvent;
+import io.meshware.cache.api.manager.CacheMessageSubscriber;
+import io.meshware.cache.spring.event.CacheDiscardEntity;
+import io.meshware.cache.spring.event.CacheDiscardEvent;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -16,9 +16,9 @@
  */
 package io.meshware.cache.api;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.StringUtils;
 
 import java.util.Objects;
 
@@ -59,7 +59,7 @@ public interface SynchronousCache<K, V, X, Y> extends LocalCache<K, V> {
      */
     default boolean effectiveCheck(K valueKey, Y syncValue) {
         try {
-            if (Objects.isNull(syncValue) || !StringUtils.hasText(syncValue.toString())) {
+            if (Objects.isNull(syncValue) || !StringUtils.isNotBlank(syncValue.toString())) {
                 return true;
             }
             if (!syncValue.equals(getSyncValueLocalCache().getValue(valueKey))) {

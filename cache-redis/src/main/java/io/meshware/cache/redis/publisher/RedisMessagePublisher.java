@@ -16,8 +16,8 @@
  */
 package io.meshware.cache.redis.publisher;
 
-import io.meshware.cache.api.event.CacheDiscardEntity;
 import io.meshware.cache.api.manager.CacheMessagePublisher;
+import io.meshware.cache.spring.event.CacheDiscardEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;

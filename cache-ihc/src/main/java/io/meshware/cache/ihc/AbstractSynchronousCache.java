@@ -36,10 +36,10 @@ public abstract class AbstractSynchronousCache<K, V, X, Y> extends AbstractLoadi
     /**
      * Get value with sync value
      *
-     * @param key
-     * @param syncValue
-     * @return
-     * @throws Exception
+     * @param key       key
+     * @param syncValue syncValue
+     * @return v
+     * @throws Exception e
      */
     @Override
     public V getValueWithSyncValue(K key, Y syncValue) throws Exception {
@@ -89,9 +89,9 @@ public abstract class AbstractSynchronousCache<K, V, X, Y> extends AbstractLoadi
     /**
      * Put value with sync value
      *
-     * @param key
-     * @param value
-     * @param syncValue
+     * @param key       key
+     * @param value     value
+     * @param syncValue syncValue
      */
     @Override
     @Synchronized

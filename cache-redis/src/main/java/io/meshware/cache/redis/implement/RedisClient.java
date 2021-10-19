@@ -17,8 +17,8 @@
 package io.meshware.cache.redis.implement;
 
 import io.meshware.cache.api.RedisCache;
-import io.meshware.cache.api.properties.CacheAdapterProperties;
 import io.meshware.cache.redis.publisher.RedisMessagePublisher;
+import io.meshware.cache.spring.properties.CacheAdapterProperties;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.util.StringUtils;
 

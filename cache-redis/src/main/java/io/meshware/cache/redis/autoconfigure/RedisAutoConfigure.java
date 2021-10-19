@@ -17,13 +17,13 @@
 package io.meshware.cache.redis.autoconfigure;
 
 import io.meshware.cache.api.Cache;
-import io.meshware.cache.api.CacheManager;
 import io.meshware.cache.api.RedisCache;
-import io.meshware.cache.api.properties.CacheAdapterProperties;
 import io.meshware.cache.redis.config.RedisCacheConfig;
 import io.meshware.cache.redis.implement.RedisClient;
 import io.meshware.cache.redis.listener.RedisMessageSubscriber;
 import io.meshware.cache.redis.publisher.RedisMessagePublisher;
+import io.meshware.cache.spring.manager.CacheManager;
+import io.meshware.cache.spring.properties.CacheAdapterProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.*;

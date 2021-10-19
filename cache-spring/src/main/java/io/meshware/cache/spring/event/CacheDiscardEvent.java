@@ -14,26 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.meshware.cache.api.properties;
+package io.meshware.cache.spring.event;
 
-import lombok.Data;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.validation.annotation.Validated;
+import org.springframework.context.ApplicationEvent;
 
 /**
- * Cache Adapter Properties
+ * Cache Discard Event
  *
  * @author Zhiguo.Chen
  */
-@Data
-@Validated
-@ConfigurationProperties(prefix = "cache.adapter")
-public class CacheAdapterProperties {
+public class CacheDiscardEvent extends ApplicationEvent {
 
-    private boolean enable = true;
+    public CacheDiscardEvent(CacheDiscardEntity source) {
+        super(source);
+    }
 
-    private String cacheType;
-
-    private String discardChannel;
-
+    //private String aaa;
 }

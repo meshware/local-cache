@@ -17,8 +17,8 @@
 package io.meshware.cache.redis.listener;
 
 import com.alibaba.fastjson.JSON;
-import io.meshware.cache.api.event.CacheDiscardEntity;
-import io.meshware.cache.api.manager.AbstractCacheSyncManager;
+import io.meshware.cache.spring.event.CacheDiscardEntity;
+import io.meshware.cache.spring.manager.AbstractCacheSyncManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.redis.connection.Message;
