@@ -23,7 +23,7 @@ There's a [README](./cache-samples/README.md) file under [cache-samples](./cache
 ### Maven dependency
 ```xml
 <properties>
-    <localCache.version>0.0.8-SNAPSHOT</localCache.version>
+    <localCache.version>0.0.8</localCache.version>
 </properties>
 
 <dependencies>
