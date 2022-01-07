@@ -34,7 +34,7 @@
         <dependency>
             <groupId>org.caffinitas.ohc</groupId>
             <artifactId>ohc-core</artifactId>
-            <version>0.7.1</version>
+            <version>0.7.4</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -60,7 +60,7 @@
         <dependency>
             <groupId>com.esotericsoftware</groupId>
             <artifactId>kryo</artifactId>
-            <version>5.1.1</version>
+            <version>5.2.1</version>
         </dependency>
         <dependency>
             <groupId>com.esotericsoftware</groupId>
