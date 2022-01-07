@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <groupId>io.meshware.cache</groupId>
     <artifactId>local-cache</artifactId>
-    <version>0.0.9-SNAPSHOT</version>
+    <version>0.0.9</version>
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
     <name>meshware-local-cache</name>

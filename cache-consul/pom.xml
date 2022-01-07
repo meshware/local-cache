@@ -5,7 +5,7 @@
     <parent>
         <artifactId>local-cache</artifactId>
         <groupId>io.meshware.cache</groupId>
-        <version>0.0.9-SNAPSHOT</version>
+        <version>0.0.9</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -27,12 +27,12 @@
         <dependency>
             <groupId>io.meshware.cache</groupId>
             <artifactId>cache-ihc</artifactId>
-            <version>0.0.9-SNAPSHOT</version>
+            <version>0.0.9</version>
         </dependency>
         <dependency>
             <groupId>io.meshware.cache</groupId>
             <artifactId>cache-ohc</artifactId>
-            <version>0.0.9-SNAPSHOT</version>
+            <version>0.0.9</version>
         </dependency>
     </dependencies>
 </project>
