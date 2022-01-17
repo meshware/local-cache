@@ -41,6 +41,8 @@ public class SynchronousObjectCache extends AbstractStringSynchronousCache<TestE
     public void initConfig() {
         this.setExpireTimeUnit(TimeUnit.SECONDS);
         this.setExpireDurationAfterWrite(30);
+        this.setRefreshTimeUnit(TimeUnit.SECONDS);
+        this.setRefreshDuration(25);
         // this.setExpireDurationAfterAccess(30);
         this.expirySupplier = () -> new Expiry<String, TestEntity>() {
             @Override
