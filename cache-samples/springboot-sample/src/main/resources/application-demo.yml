@@ -1,9 +1,9 @@
 spring:
   redis:
     database: 0
-    host: a.iotmse.com
+    host: 127.0.0.1
     port: 6379
-    password: 2019Beijing
+    password: 123456
     timeout: 10000ms
     lettuce:
       pool:

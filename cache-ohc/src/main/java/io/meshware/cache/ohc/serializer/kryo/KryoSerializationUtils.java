@@ -145,6 +145,7 @@ public class KryoSerializationUtils {
      *
      * @param bytes byte[]
      * @param clazz Class
+     * @param <T>   T
      * @return T
      */
     @Nullable

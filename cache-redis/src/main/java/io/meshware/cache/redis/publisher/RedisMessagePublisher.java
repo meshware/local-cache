@@ -30,7 +30,6 @@ import java.util.concurrent.CompletableFuture;
  * @author Zhiguo.Chen
  */
 @Slf4j
-//@Component
 public class RedisMessagePublisher implements CacheMessagePublisher {
 
     private final StringRedisTemplate stringRedisTemplate;
@@ -50,7 +49,7 @@ public class RedisMessagePublisher implements CacheMessagePublisher {
      */
     @Override
     public CompletableFuture<Void> sendDiscardCacheMessage(String channelName, String cacheName, String deleteKey) {
-        CacheDiscardEntity cacheDiscard = new CacheDiscardEntity(cacheName, deleteKey); //.setDeleteKey("AAA").setCacheClass(TestCache.class);
+        CacheDiscardEntity cacheDiscard = new CacheDiscardEntity(cacheName, deleteKey);
         stringRedisTemplate.convertAndSend(channelName, cacheDiscard.toString());
         log.info("[Cache Discard]Send cache discard message success! channelName:{}, message:{}", channelName, cacheDiscard.toString());
         return CompletableFuture.completedFuture(null);
