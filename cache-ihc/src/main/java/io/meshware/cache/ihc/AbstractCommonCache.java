@@ -151,7 +151,8 @@ public abstract class AbstractCommonCache<K, V> implements LocalCache<K, V> {
         V result = getValue(key);
         if (result == null) {
             synchronized (this) {
-                if (null == getValue(key)) {
+                result = getValue(key);
+                if (result == null) {
                     result = defaultValueSupplier.get();
                     putValue(key, result);
                 }
