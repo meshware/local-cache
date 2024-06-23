@@ -53,14 +53,26 @@ public abstract class AbstractSynchronousCache<K, V, X, Y> extends AbstractLoadi
                 return getValue(key);
             }
             synchronized (this) {
+                boolean needSync = false;
                 if (!effectiveCheck(key, syncValue)) {
+                    needSync = true;
                     removeValue(key);
-                    getSyncValueLocalCache().putValue(key, syncValue);
-                    if (log.isInfoEnabled()) {
-                        log.info("[缓存同步]数据同步Key不一致，已更新！Cache={}, Key={}, SyncValue={}", getName(), key, syncValue);
-                    }
                 }
-                return getValue(key);
+                V value = null;
+                try {
+                    value = getValue(key);
+                    if (needSync) {
+                        getSyncValueLocalCache().putValue(key, syncValue);
+                        if (log.isInfoEnabled()) {
+                            log.info("[缓存同步]数据同步Key不一致，已更新！Cache={}, Key={}, SyncValue={}",
+                                    getName(), key, syncValue);
+                        }
+                    }
+                } catch (Exception e) {
+                    log.error("Error occurred when getValue, Cache={}, Key={}, SyncValue={}",
+                            getName(), key, syncValue, e);
+                }
+                return value;
             }
         }
     }
