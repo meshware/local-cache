@@ -22,6 +22,9 @@ import lombok.Synchronized;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
+
 /**
  * Abstract Synchronous Cache
  *
@@ -33,6 +36,8 @@ import lombok.extern.slf4j.Slf4j;
 public abstract class AbstractSynchronousCache<K, V, X, Y> extends AbstractLoadingCache<K, V>
         implements SynchronousCache<K, V, X, Y> {
 
+    private final ReadWriteLock rwLock = new ReentrantReadWriteLock();
+
     /**
      * Get value with sync value
      *
@@ -43,37 +48,38 @@ public abstract class AbstractSynchronousCache<K, V, X, Y> extends AbstractLoadi
      */
     @Override
     public V getValueWithSyncValue(K key, Y syncValue) throws Exception {
-        if (effectiveCheck(key, syncValue)) {
-            return getValue(key);
-        } else {
-            if (null == getSyncValueLocalCache()) {
-                if (log.isWarnEnabled()) {
-                    log.warn("该同步型缓存未提供'SyncValueLocalCache'具体实现，无法提供自动同步功能！cacheName={}", getName());
-                }
-                return getValue(key);
-            }
-            synchronized (this) {
-                boolean needSync = false;
-                if (!effectiveCheck(key, syncValue)) {
-                    needSync = true;
-                    removeValue(key);
-                }
-                V value = null;
-                try {
-                    value = getValue(key);
-                    if (needSync) {
-                        getSyncValueLocalCache().putValue(key, syncValue);
-                        if (log.isInfoEnabled()) {
-                            log.info("[缓存同步]数据同步Key不一致，已更新！Cache={}, Key={}, SyncValue={}",
-                                    getName(), key, syncValue);
-                        }
-                    }
-                } catch (Exception e) {
-                    log.error("Error occurred when getValue, Cache={}, Key={}, SyncValue={}",
-                            getName(), key, syncValue, e);
+        if (getSyncValueLocalCache() == null) {
+            log.warn("SyncValueLocalCache not provided, automatic sync unavailable. Cache={}", getName());
+            return getValueSafely(key);
+        }
+        boolean needSync = !effectiveCheck(key, syncValue);
+        if (!needSync) {
+            return getValueSafely(key);
+        }
+        rwLock.writeLock().lock();
+        try {
+            if (!effectiveCheck(key, syncValue)) {
+                removeValue(key);
+                V value = getValueSafely(key);
+                if (value != null) {
+                    getSyncValueLocalCache().putValue(key, syncValue);
+                    log.info("Cache synced due to inconsistent sync value. Cache={}, Key={}, SyncValue={}",
+                            getName(), key, syncValue);
                 }
                 return value;
             }
+        } finally {
+            rwLock.writeLock().unlock();
+        }
+        return getValueSafely(key);
+    }
+
+    private V getValueSafely(K key) {
+        try {
+            return getValue(key);
+        } catch (Exception e) {
+            log.error("Error retrieving value. Cache={}, Key={}", getName(), key, e);
+            return null;
         }
     }
 
