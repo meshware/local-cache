@@ -49,7 +49,6 @@
         <module>cache-ohc</module>
         <module>cache-spring</module>
         <module>cache-redis</module>
-        <module>cache-consul</module>
         <module>cache-samples</module>
     </modules>
 
