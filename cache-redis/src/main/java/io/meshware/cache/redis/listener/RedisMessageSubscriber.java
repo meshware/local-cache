@@ -41,7 +41,7 @@ public class RedisMessageSubscriber extends AbstractCacheSyncManager implements 
 
     @Override
     public void onMessage(final Message message, final byte[] pattern) {
-        log.info("接收到channel:{}, message:{}", new String(message.getChannel(), StandardCharsets.UTF_8), message.toString());
+        log.info("Received channel:{}, message:{}", new String(message.getChannel(), StandardCharsets.UTF_8), message.toString());
         CacheDiscardEntity cacheDiscard = JSON.parseObject(message.toString(), CacheDiscardEntity.class);
         doCacheDiscard(cacheDiscard);
     }

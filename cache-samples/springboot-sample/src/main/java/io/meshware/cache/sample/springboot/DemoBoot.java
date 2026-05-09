@@ -38,29 +38,29 @@ public class DemoBoot {
         for (int i = 0; i < 1000; i++) {
             new Thread(() -> {
                 try {
-                    log.info("1当前对象：{}", JSON.toJSONString(synchronousObjectCache.getValueWithSyncKey("key-one", "syncKey-one")));
+                    log.info("1 Current object: {}", JSON.toJSONString(synchronousObjectCache.getValueWithSyncKey("key-one", "syncKey-one")));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                // log.info("1当前循环：{}", i);
+                // log.info("1 Current loop: {}", i);
             }).start();
         }
 
         for (int i = 0; i < 1000; i++) {
             new Thread(() -> {
                 try {
-                    log.info("2当前对象：{}", JSON.toJSONString(synchronousObjectCache.getValueWithSyncKey("key-two", "syncKey-two")));
+                    log.info("2 Current object: {}", JSON.toJSONString(synchronousObjectCache.getValueWithSyncKey("key-two", "syncKey-two")));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                // log.info("2当前循环：{}", i);
+                // log.info("2 Current loop: {}", i);
             }).start();
         }
         AtomicLong counter = new AtomicLong(0);
         while (true) {
-            log.info("循环获取对象：{}", JSON.toJSONString(synchronousObjectCache.getValueWithSyncKey("key-one", "syncKey-one")));
+            log.info("Loop fetching object: {}", JSON.toJSONString(synchronousObjectCache.getValueWithSyncKey("key-one", "syncKey-one")));
             commonTestCache.putValue(counter.toString(), counter.toString());
-            log.info("向普通本地缓存中添加数据，第{}次，当前缓存数据量：{}", counter, commonTestCache.getSize());
+            log.info("Adding data to normal local cache, iteration {}, current cache size: {}", counter, commonTestCache.getSize());
             Thread.sleep(1000);
             counter.incrementAndGet();
         }

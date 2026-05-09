@@ -32,10 +32,21 @@ import java.nio.ByteBuffer;
 @Slf4j
 public class ObjectSerializer<T> implements CacheSerializer<T> {
 
+    /**
+     * Cache serialized bytes to avoid double serialization.
+     * OHC calls serializedSize() first, then serialize(), so we can reuse the result.
+     */
+    private final ThreadLocal<byte[]> cachedBytes = new ThreadLocal<>();
+
     @Override
     public void serialize(T t, ByteBuffer byteBuffer) {
-        Assert.notNull(t, "传入对象不可为null！");
-        byte[] bytes = SerializationUtils.serialize(t);
+        Assert.notNull(t, "Object to serialize must not be null!");
+        byte[] bytes = cachedBytes.get();
+        if (bytes == null) {
+            bytes = SerializationUtils.serialize(t);
+        } else {
+            cachedBytes.remove();
+        }
         byteBuffer.put(bytes);
     }
 
@@ -49,6 +60,7 @@ public class ObjectSerializer<T> implements CacheSerializer<T> {
     @Override
     public int serializedSize(T t) {
         byte[] bytes = SerializationUtils.serialize(t);
+        cachedBytes.set(bytes);
         return bytes == null ? 0 : bytes.length;
     }
 }

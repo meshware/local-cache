@@ -23,7 +23,7 @@
 ### Maven dependency
 ```xml
 <properties>
-    <localCache.version>0.1.0</localCache.version>
+    <localCache.version>1.0.0-SNAPSHOT</localCache.version>
 </properties>
 
 <dependencies>

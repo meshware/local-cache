@@ -14,34 +14,45 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.meshware.cache.ohc.serializer;
+package io.meshware.cache.ohc.serializer.protostuff;
 
-import org.caffinitas.ohc.CacheSerializer;
-
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 
 /**
- * Integer Key Serializer
+ * InputStream adapter for ByteBuffer.
+ * <p>
+ * Replaces the dependency on {@code com.esotericsoftware.kryo.io.ByteBufferInputStream}
+ * so that the Protostuff serializer module does not require Kryo on the classpath.
+ * </p>
  *
  * @author Zhiguo.Chen
- * @version 20210210
  */
-public class IntegerSerializer implements CacheSerializer<Integer> {
+public class ByteBufferInputStream extends InputStream {
 
-    public static final int FIXED_KEY_LEN = 4;
+    private final ByteBuffer buffer;
 
-    @Override
-    public  void serialize(Integer integer, ByteBuffer byteBuffer) {
-        byteBuffer.putInt(integer);
+    public ByteBufferInputStream(ByteBuffer buffer) {
+        this.buffer = buffer;
     }
 
     @Override
-    public Integer deserialize(ByteBuffer byteBuffer) {
-        return byteBuffer.getInt();
+    public int read() {
+        return buffer.hasRemaining() ? buffer.get() & 0xFF : -1;
     }
 
     @Override
-    public int serializedSize(Integer integer) {
-        return FIXED_KEY_LEN;
+    public int read(byte[] b, int off, int len) {
+        if (!buffer.hasRemaining()) {
+            return -1;
+        }
+        int length = Math.min(buffer.remaining(), len);
+        buffer.get(b, off, length);
+        return length;
+    }
+
+    @Override
+    public int available() {
+        return buffer.remaining();
     }
 }

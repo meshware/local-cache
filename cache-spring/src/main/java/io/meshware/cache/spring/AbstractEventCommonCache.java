@@ -37,9 +37,9 @@ public abstract class AbstractEventCommonCache<K, V> extends AbstractCommonCache
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        initConfig();
-        init();
+        buildCache();
     }
+
 
     @EventListener
     public void discardCacheByKey(CacheDiscardEvent cacheDiscardEvent) {

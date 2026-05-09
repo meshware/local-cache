@@ -16,7 +16,7 @@
  */
 package io.meshware.cache.ohc.serializer.protostuff;
 
-import com.esotericsoftware.kryo.io.ByteBufferInputStream;
+import io.meshware.cache.ohc.serializer.protostuff.ByteBufferInputStream;
 import lombok.extern.slf4j.Slf4j;
 import org.caffinitas.ohc.CacheSerializer;
 
@@ -34,8 +34,7 @@ import java.util.Objects;
 public class ProtostuffObjectSerializer<T> implements CacheSerializer<T> {
 
     private Class<T> clazz;
-
-    // protected final Type type = ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+    private final ThreadLocal<byte[]> cachedBytes = new ThreadLocal<>();
 
     public ProtostuffObjectSerializer(Class<T> clazz) {
         this.clazz = clazz;
@@ -43,13 +42,15 @@ public class ProtostuffObjectSerializer<T> implements CacheSerializer<T> {
 
     @Override
     public void serialize(T value, ByteBuffer buf) {
-        // WritableByteChannel channel = Channels.newChannel(stream);
-        // channel.write(buf);
-        // serialization.getSerializer().serialize(new ByteBufferOutputStream(buf), value);
         if (null == value) {
             return;
         }
-        byte[] bytes = ProtostuffSerializationUtils.serializer(value);
+        byte[] bytes = cachedBytes.get();
+        if (bytes == null) {
+            bytes = ProtostuffSerializationUtils.serializer(value);
+        } else {
+            cachedBytes.remove();
+        }
         if (null != bytes && bytes.length > 0) {
             buf.put(bytes);
         }
@@ -57,7 +58,6 @@ public class ProtostuffObjectSerializer<T> implements CacheSerializer<T> {
 
     @Override
     public T deserialize(ByteBuffer buf) {
-        // return serialization.getSerializer().deserialize(new ByteBufferInputStream(buf), type);
         try {
             return ProtostuffSerializationUtils.deserializer(new ByteBufferInputStream(buf), clazz);
         } catch (Exception e) {
@@ -68,12 +68,8 @@ public class ProtostuffObjectSerializer<T> implements CacheSerializer<T> {
 
     @Override
     public int serializedSize(T value) {
-        //TODO 用JDK序列化结果判断最大自己长度，非最佳实践
-        // byte[] bytes = SerializationUtils.serialize(value);
-        // ByteBuffer byteBuffer = ByteBuffer.allocate(bytes == null ? 0 : bytes.length);
-        // serialization.getSerializer().serialize(new ByteBufferOutputStream(byteBuffer), value);
-        // return byteBuffer.position();
         byte[] bytes = ProtostuffSerializationUtils.serializer(value);
+        cachedBytes.set(bytes);
         return Objects.nonNull(bytes) ? bytes.length : 0;
     }
 

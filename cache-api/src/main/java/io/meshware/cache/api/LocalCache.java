@@ -73,15 +73,44 @@ public interface LocalCache<K, V> extends Cache {
      */
     void removeAll();
 
+    /**
+     * Clean up expired entries (trigger pending evictions).
+     */
     void cleanUp();
 
+    /**
+     * Get all keys in the cache.
+     *
+     * @return set of keys
+     */
     Set<K> getKeys();
 
+    /**
+     * Get all values in the cache.
+     *
+     * @return collection of values
+     */
     Collection<V> getValues();
 
+    /**
+     * Get the maximum size (capacity) of the cache.
+     *
+     * @return max size
+     */
     long getMaxSize();
 
+    /**
+     * Get the current estimated size of the cache.
+     *
+     * @return current size
+     */
     long getSize();
 
+    /**
+     * Check if the cache contains an entry for the given key.
+     *
+     * @param key key to check
+     * @return true if the key exists, false otherwise
+     */
     boolean containsKey(K key);
 }

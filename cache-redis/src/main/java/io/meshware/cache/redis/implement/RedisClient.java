@@ -65,12 +65,12 @@ public class RedisClient implements RedisCache {
 
     @Override
     public boolean setnx(String key, String value) {
-        return stringRedisTemplate.opsForValue().setIfAbsent(key, value);
+        return Boolean.TRUE.equals(stringRedisTemplate.opsForValue().setIfAbsent(key, value));
     }
 
     @Override
     public boolean setnx(String key, String value, long time) {
-        return stringRedisTemplate.opsForValue().setIfAbsent(key, value, time, TimeUnit.SECONDS);
+        return Boolean.TRUE.equals(stringRedisTemplate.opsForValue().setIfAbsent(key, value, time, TimeUnit.SECONDS));
     }
 
     @Override
@@ -82,7 +82,7 @@ public class RedisClient implements RedisCache {
     }
 
     @Override
-    public void hmset(String key, Map value) {
+    public void hmset(String key, Map<String, String> value) {
         stringRedisTemplate.opsForHash().putAll(key, value);
     }
 
@@ -97,8 +97,13 @@ public class RedisClient implements RedisCache {
     }
 
     @Override
-    public Map hgetAll(String key) {
-        return stringRedisTemplate.opsForHash().entries(key);
+    public Map<String, String> hgetAll(String key) {
+        Map<Object, Object> entries = stringRedisTemplate.opsForHash().entries(key);
+        Map<String, String> result = new java.util.HashMap<>(entries.size());
+        for (Map.Entry<Object, Object> entry : entries.entrySet()) {
+            result.put(String.valueOf(entry.getKey()), String.valueOf(entry.getValue()));
+        }
+        return result;
     }
 
     @Override

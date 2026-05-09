@@ -16,7 +16,7 @@
  */
 package io.meshware.cache.ohc.serializer.protostuff;
 
-import com.esotericsoftware.kryo.io.ByteBufferInputStream;
+import io.meshware.cache.ohc.serializer.protostuff.ByteBufferInputStream;
 import io.protostuff.LinkedBuffer;
 import io.protostuff.ProtostuffIOUtil;
 import io.protostuff.Schema;

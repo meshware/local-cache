@@ -14,30 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.meshware.cache.api;
+package io.meshware.cache.spring;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import io.meshware.cache.spring.manager.CacheManager;
+import org.junit.Assert;
+import org.junit.Test;
+import org.springframework.context.ApplicationContext;
+import static org.mockito.Mockito.*;
 
-/**
- * Redis Cache Interface
- * <p>
- * Combines {@link RedisKeyValueOperations} for basic key-value operations
- * and {@link RedisDataStructureOperations} for collection data structures.
- * </p>
- *
- * @author Zhiguo.Chen
- */
-public interface RedisCache extends Cache, RedisKeyValueOperations, RedisDataStructureOperations {
+public class CacheManagerTest {
 
-    /**
-     * Set value and notify other nodes to discard their local cache.
-     *
-     * @param key       redis key
-     * @param value     value
-     * @param cacheName local cache name to discard
-     * @param cacheKey  local cache key to discard
-     */
-    void setWithNotify(String key, String value, String cacheName, String cacheKey);
+    @Test
+    public void testCacheManager() {
+        ApplicationContext mockContext = mock(ApplicationContext.class);
+        CacheManager manager = new CacheManager(mockContext);
+        
+        Assert.assertNotNull(manager);
+    }
 }

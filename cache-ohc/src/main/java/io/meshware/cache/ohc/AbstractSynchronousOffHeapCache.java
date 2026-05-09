@@ -17,9 +17,11 @@
 package io.meshware.cache.ohc;
 
 import io.meshware.cache.api.SynchronousCache;
+import lombok.Data;
+import lombok.experimental.Accessors;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicLongFieldUpdater;
 import java.util.concurrent.locks.StampedLock;
 
 /**
@@ -28,6 +30,9 @@ import java.util.concurrent.locks.StampedLock;
  * @author Zhiguo.Chen
  * @version 20210310
  */
+@Slf4j
+@Data
+@Accessors(chain = true)
 public abstract class AbstractSynchronousOffHeapCache<K, V, X, Y> extends AbstractOffHeapCache<K, V>
         implements SynchronousCache<K, V, X, Y> {
 
@@ -54,20 +59,17 @@ public abstract class AbstractSynchronousOffHeapCache<K, V, X, Y> extends Abstra
         } finally {
             stampedLock.unlock(readLockStamp);
         }
-        // boolean wasFirst = lock();
-        // long stamp = stampedLock.tryConvertToWriteLock(readStamp);
         long writeLockStamp = stampedLock.writeLock();
         try {
             if (!effectiveCheck(key, syncValue)) {
                 removeValue(key);
                 getSyncValueLocalCache().putValue(key, syncValue);
                 if (log.isInfoEnabled()) {
-                    log.info("[OHC同步]数据同步Key不一致，已更新！Cache={}, Key={}, SyncValue={}", getName(), key, syncValue);
+                    log.info("Cache synced due to inconsistent sync value. Cache={}, Key={}, SyncValue={}", getName(), key, syncValue);
                 }
             }
             return getWithLoader(key);
         } finally {
-            // unlock(wasFirst);
             stampedLock.unlockWrite(writeLockStamp);
         }
     }
@@ -86,9 +88,7 @@ public abstract class AbstractSynchronousOffHeapCache<K, V, X, Y> extends Abstra
             Y syncValue = getSyncPairLocalCache().getValueOrDefault(syncKey, null);
             return getValueWithSyncValue(key, syncValue);
         } else {
-            if (log.isWarnEnabled()) {
-                log.warn("该同步型缓存未提供'SyncPairLocalCache'具体实现，无法提供自动同步功能！cacheName={}", getName());
-            }
+            log.warn("SyncPairLocalCache not provided, automatic sync unavailable. Cache={}", getName());
             return getValue(key);
         }
     }
@@ -107,49 +107,12 @@ public abstract class AbstractSynchronousOffHeapCache<K, V, X, Y> extends Abstra
             if (null != getSyncValueLocalCache()) {
                 getSyncValueLocalCache().putValue(key, syncValue);
             } else {
-                if (log.isWarnEnabled()) {
-                    log.warn("该同步型缓存未提供'SyncValueLocalCache'具体实现，无法提供自动同步功能！cacheName={}", getName());
-                }
+                log.warn("SyncValueLocalCache not provided, automatic sync unavailable. Cache={}", getName());
             }
             putValue(key, value);
         } finally {
             stampedLock.unlockWrite(stamp);
         }
-    }
-
-    private final boolean unlocked = false;
-    private volatile long lock;
-    private static final AtomicLongFieldUpdater<AbstractSynchronousOffHeapCache> lockFieldUpdater =
-            AtomicLongFieldUpdater.newUpdater(AbstractSynchronousOffHeapCache.class, "lock");
-
-    private boolean lock() {
-        if (unlocked) {
-            return false;
-        }
-
-        long t = Thread.currentThread().getId();
-
-        if (t == lockFieldUpdater.get(this)) {
-            return false;
-        }
-        while (true) {
-            if (lockFieldUpdater.compareAndSet(this, 0L, t)) {
-                return true;
-            }
-
-            while (lockFieldUpdater.get(this) != 0L) {
-                Thread.yield();
-            }
-        }
-    }
-
-    private void unlock(boolean wasFirst) {
-        if (unlocked || !wasFirst) {
-            return;
-        }
-        long t = Thread.currentThread().getId();
-        boolean r = lockFieldUpdater.compareAndSet(this, t, 0L);
-        assert r;
     }
 
 }

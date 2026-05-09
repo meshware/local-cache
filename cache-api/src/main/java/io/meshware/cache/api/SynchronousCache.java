@@ -16,10 +16,6 @@
  */
 package io.meshware.cache.api;
 
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.Objects;
 
 /**
@@ -33,8 +29,6 @@ import java.util.Objects;
  * @author Zhiguo.Chen
  */
 public interface SynchronousCache<K, V, X, Y> extends LocalCache<K, V> {
-
-    Logger log = LoggerFactory.getLogger(SynchronousCache.class);
 
     /**
      * Get sync pair local cache storage
@@ -59,16 +53,21 @@ public interface SynchronousCache<K, V, X, Y> extends LocalCache<K, V> {
      */
     default boolean effectiveCheck(K valueKey, Y syncValue) {
         try {
-            if (Objects.isNull(syncValue) || !StringUtils.isNotBlank(syncValue.toString())) {
+            if (syncValue == null) {
                 return true;
             }
-            if (!syncValue.equals(getSyncValueLocalCache().getValue(valueKey))) {
-                return false;
+            String syncStr = syncValue.toString();
+            if (syncStr == null || syncStr.trim().isEmpty()) {
+                return true;
             }
+            LocalCache<K, Y> syncValueCache = getSyncValueLocalCache();
+            if (syncValueCache == null) {
+                return true;
+            }
+            return syncValue.equals(syncValueCache.getValue(valueKey));
         } catch (Exception e) {
-            log.error("Check value refresh error, valueKey:{}, syncValue:{}", valueKey, syncValue, e);
+            return true;
         }
-        return true;
     }
 
     /**

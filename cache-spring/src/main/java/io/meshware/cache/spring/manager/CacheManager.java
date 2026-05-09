@@ -18,7 +18,6 @@ package io.meshware.cache.spring.manager;
 
 import io.meshware.cache.api.Cache;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.util.StringUtils;
 
@@ -33,28 +32,27 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 public class CacheManager {
 
-    private static ApplicationContext applicationContext;
+    private final ApplicationContext applicationContext;
 
-    private static Map<String, Cache> cacheMap = new ConcurrentHashMap<>();
+    private final Map<String, Cache> cacheMap = new ConcurrentHashMap<>();
 
-    @Autowired
     public CacheManager(ApplicationContext applicationContext) {
-        CacheManager.applicationContext = applicationContext;
+        this.applicationContext = applicationContext;
         init();
     }
 
-    public static void init() {
+    public void init() {
         if (applicationContext != null) {
             Map<String, Cache> beans = applicationContext.getBeansOfType(Cache.class);
             beans.forEach((beanName, cacheBean) -> addHandler(cacheBean, beanName));
             log.info("Init local cache finished, local cache count:{}", cacheMap.size());
         } else {
-            log.error("ApplicationContext is null, please value ascribed first!");
+            log.error("ApplicationContext is null, please set value first!");
         }
     }
 
-    public static void addHandler(Cache cache, String defaultName) {
-        String cacheName = StringUtils.hasText(cache.getName()) ? defaultName : cache.getName();
+    public void addHandler(Cache cache, String defaultName) {
+        String cacheName = StringUtils.hasText(cache.getName()) ? cache.getName() : defaultName;
         if (!cacheMap.containsKey(cacheName)) {
             cacheMap.putIfAbsent(cacheName, cache);
         } else {
@@ -63,7 +61,7 @@ public class CacheManager {
         }
     }
 
-    public static Cache getCache(String cacheName) {
+    public Cache getCache(String cacheName) {
         if (cacheMap.size() == 0) {
             init();
         }

@@ -16,8 +16,6 @@
  */
 package io.meshware.cache.spring;
 
-import com.github.benmanes.caffeine.cache.*;
-import io.meshware.cache.api.LocalCache;
 import io.meshware.cache.ihc.AbstractLoadingCache;
 import io.meshware.cache.spring.event.CacheDiscardEntity;
 import io.meshware.cache.spring.event.CacheDiscardEvent;
@@ -26,11 +24,6 @@ import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.event.EventListener;
-
-import java.util.Collection;
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
-import java.util.function.Supplier;
 
 /**
  * Abstract Loading Cache
@@ -42,12 +35,11 @@ import java.util.function.Supplier;
 @Accessors(chain = true)
 public abstract class AbstractEventLoadingCache<K, V> extends AbstractLoadingCache<K, V> implements InitializingBean {
 
-
     @Override
     public void afterPropertiesSet() throws Exception {
-        initConfig();
-        init();
+        buildCache();
     }
+
 
     /**
      * Discard cache by Spring event

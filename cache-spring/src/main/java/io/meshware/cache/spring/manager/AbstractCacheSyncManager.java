@@ -42,8 +42,8 @@ public abstract class AbstractCacheSyncManager implements CacheMessageSubscriber
 
     static {
         ThreadFactory nameThreadFactory = new ThreadFactoryBuilder().setNameFormat("cache-sync-pool-%d").build();
-        pool = new ThreadPoolExecutor(5, 200, 0L, TimeUnit.MILLISECONDS,
-                new LinkedBlockingQueue<Runnable>(1024), nameThreadFactory, new ThreadPoolExecutor.AbortPolicy());
+        pool = new ThreadPoolExecutor(5, 20, 60L, TimeUnit.SECONDS,
+                new LinkedBlockingQueue<Runnable>(1024), nameThreadFactory, new ThreadPoolExecutor.CallerRunsPolicy());
     }
 
     private ApplicationContext applicationContext;

@@ -285,8 +285,12 @@ public abstract class AbstractOffHeapCache<K, V> implements OffHeapCache<K, V>, 
     @Override
     public Set<K> getKeys() {
         Set<K> keys = new HashSet<>();
-        for (CloseableIterator<K> it = keyIterator(); it.hasNext(); ) {
-            keys.add(it.next());
+        try (CloseableIterator<K> it = keyIterator()) {
+            while (it.hasNext()) {
+                keys.add(it.next());
+            }
+        } catch (java.io.IOException e) {
+            log.warn("Error closing key iterator for cache: {}", getName(), e);
         }
         return keys;
     }

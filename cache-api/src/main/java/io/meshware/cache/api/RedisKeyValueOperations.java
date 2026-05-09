@@ -16,28 +16,38 @@
  */
 package io.meshware.cache.api;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 /**
- * Redis Cache Interface
+ * Redis key-value operations interface.
  * <p>
- * Combines {@link RedisKeyValueOperations} for basic key-value operations
- * and {@link RedisDataStructureOperations} for collection data structures.
+ * Defines basic Redis string/key operations including get, set, delete,
+ * expiration, publish, increment, and bitmap operations.
  * </p>
  *
  * @author Zhiguo.Chen
  */
-public interface RedisCache extends Cache, RedisKeyValueOperations, RedisDataStructureOperations {
+public interface RedisKeyValueOperations {
 
-    /**
-     * Set value and notify other nodes to discard their local cache.
-     *
-     * @param key       redis key
-     * @param value     value
-     * @param cacheName local cache name to discard
-     * @param cacheKey  local cache key to discard
-     */
-    void setWithNotify(String key, String value, String cacheName, String cacheKey);
+    void del(String key);
+
+    String get(String key);
+
+    void set(String key, String value);
+
+    boolean setnx(String key, String value);
+
+    boolean setnx(String key, String value, long time);
+
+    void setex(String key, long time, String value);
+
+    boolean exists(String key);
+
+    Boolean expire(String key, long maxTime);
+
+    Long incr(String key);
+
+    void publish(String channel, Object value);
+
+    Boolean setBit(String key, long offset, boolean value);
+
+    Boolean getBit(String key, long offset);
 }

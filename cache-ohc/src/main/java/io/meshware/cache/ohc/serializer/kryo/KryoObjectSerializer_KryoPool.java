@@ -32,6 +32,7 @@ import java.nio.ByteBuffer;
 public class KryoObjectSerializer_KryoPool<T> implements CacheSerializer<T> {
 
     private Class<T> clazz;
+    private final ThreadLocal<byte[]> cachedBytes = new ThreadLocal<>();
 
     public KryoObjectSerializer_KryoPool(Class<T> clazz) {
         this.clazz = clazz;
@@ -39,8 +40,13 @@ public class KryoObjectSerializer_KryoPool<T> implements CacheSerializer<T> {
 
     @Override
     public void serialize(T t, ByteBuffer byteBuffer) {
-        Assert.notNull(t, "传入对象不可为null！");
-        byte[] bytes = KryoSerializationUtils_KryoPool.serialize(t);
+        Assert.notNull(t, "Object to serialize must not be null!");
+        byte[] bytes = cachedBytes.get();
+        if (bytes == null) {
+            bytes = KryoSerializationUtils_KryoPool.serialize(t);
+        } else {
+            cachedBytes.remove();
+        }
         byteBuffer.put(bytes);
     }
 
@@ -54,6 +60,7 @@ public class KryoObjectSerializer_KryoPool<T> implements CacheSerializer<T> {
     @Override
     public int serializedSize(T t) {
         byte[] bytes = KryoSerializationUtils_KryoPool.serialize(t);
+        cachedBytes.set(bytes);
         return bytes == null ? 0 : bytes.length;
     }
 }

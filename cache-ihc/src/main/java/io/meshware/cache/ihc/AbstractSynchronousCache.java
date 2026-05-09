@@ -18,7 +18,6 @@ package io.meshware.cache.ihc;
 
 import io.meshware.cache.api.SynchronousCache;
 import lombok.Data;
-import lombok.Synchronized;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 
@@ -84,7 +83,7 @@ public abstract class AbstractSynchronousCache<K, V, X, Y> extends AbstractLoadi
     }
 
     /**
-     * Get value with sync value
+     * Get value with sync key
      *
      * @param key     key
      * @param syncKey syncKey
@@ -97,30 +96,31 @@ public abstract class AbstractSynchronousCache<K, V, X, Y> extends AbstractLoadi
             Y syncValue = getSyncPairLocalCache().getValueOrDefault(syncKey, null);
             return getValueWithSyncValue(key, syncValue);
         } else {
-            if (log.isWarnEnabled()) {
-                log.warn("该同步型缓存未提供'SyncPairLocalCache'具体实现，无法提供自动同步功能！cacheName={}", getName());
-            }
+            log.warn("SyncPairLocalCache not provided, automatic sync unavailable. Cache={}", getName());
             return getValue(key);
         }
     }
 
     /**
-     * Put value with sync value
+     * Put value with sync value.
+     * Uses the same ReadWriteLock as getValueWithSyncValue to ensure consistency.
      *
      * @param key       key
      * @param value     value
      * @param syncValue syncValue
      */
     @Override
-    @Synchronized
     public void putValue(K key, V value, Y syncValue) {
-        if (null != getSyncValueLocalCache()) {
-            getSyncValueLocalCache().putValue(key, syncValue);
-        } else {
-            if (log.isWarnEnabled()) {
-                log.warn("该同步型缓存未提供'SyncValueLocalCache'具体实现，无法提供自动同步功能！cacheName={}", getName());
+        rwLock.writeLock().lock();
+        try {
+            if (null != getSyncValueLocalCache()) {
+                getSyncValueLocalCache().putValue(key, syncValue);
+            } else {
+                log.warn("SyncValueLocalCache not provided, automatic sync unavailable. Cache={}", getName());
             }
+            putValue(key, value);
+        } finally {
+            rwLock.writeLock().unlock();
         }
-        putValue(key, value);
     }
 }

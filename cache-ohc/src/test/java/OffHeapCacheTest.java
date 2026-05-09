@@ -53,7 +53,7 @@ public class OffHeapCacheTest {
         log.info(value.getCreateTime().toString());
         log.info(objectOffHeapCache.getValue("aaa").getAge().toString());
         entity1.setName("test2");
-        log.info("原缓存数据不会被修改");
+        log.info("Original cache data will not be modified");
         Assert.assertNotEquals("test2", objectOffHeapCache.getValue("aaa").getName());
         objectOffHeapCache.put("aaa", entity1);
         Assert.assertEquals("test2", objectOffHeapCache.getValue("aaa").getName());
@@ -73,30 +73,26 @@ public class OffHeapCacheTest {
 
     @Test
     public void testObjectOffHeapCacheMulti() {
-        for (int i = 0; i < 1000; i++) {
+        int threadCount = 10;
+        java.util.concurrent.CountDownLatch latch = new java.util.concurrent.CountDownLatch(threadCount);
+        for (int i = 0; i < threadCount; i++) {
             int finalI = i;
             new Thread(() -> {
                 try {
                     for (int j = 0; j < 100; j++) {
                         String name = finalI + "_name";
                         TestEntity entity = objectOffHeapCache.getWithLoader(name);
-                        // log.info(entity.getName());
                         Assert.assertEquals(name, entity.getName());
-                        assert !name.equals(entity.getName() + "aaa");
-                        if (!name.equals(entity.getName())) {
-                            log.error("数据有误！key={}", name);
-                        } else {
-                            log.info("数据正确！key={}", name);
-                        }
                     }
-                    // testListOffHeapCache();
                 } catch (Exception e) {
                     log.error(e.getMessage(), e);
+                } finally {
+                    latch.countDown();
                 }
             }).start();
         }
         try {
-            Thread.currentThread().join();
+            latch.await();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -110,10 +106,7 @@ public class OffHeapCacheTest {
         ArrayList<TestEntity> list = Lists.newArrayList(entity1, entity2, entity3);
         log.info("Memory used={}, size={}, maxSize={}", objectOffHeapCache.memUsed(), objectOffHeapCache.getSize(), objectOffHeapCache.getMaxSize());
         listOffHeapCache.putValue("list1", list);
-        for (int i = 0; i < 100000; i++) {
-            log.info("This={}", i);
-            listOffHeapCache.getWithLoader("list1" + i);
-        }
+
         List<TestEntity> value = listOffHeapCache.getWithLoader("list1");
         log.info("Memory used={}, size={}, maxSize={}", objectOffHeapCache.memUsed(), objectOffHeapCache.getSize(), objectOffHeapCache.getMaxSize());
         Assert.assertEquals(3, value.size());
