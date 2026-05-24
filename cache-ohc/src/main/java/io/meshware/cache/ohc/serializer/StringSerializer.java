@@ -18,6 +18,7 @@ package io.meshware.cache.ohc.serializer;
 
 import com.google.common.base.Charsets;
 import org.caffinitas.ohc.CacheSerializer;
+import org.springframework.util.Assert;
 
 import java.nio.ByteBuffer;
 
@@ -31,6 +32,7 @@ public class StringSerializer implements CacheSerializer<String> {
 
     @Override
     public void serialize(String s, ByteBuffer byteBuffer) {
+        Assert.notNull(s, "String to serialize must not be null!");
         byte[] bytes = s.getBytes(Charsets.UTF_8);
         byteBuffer.put((byte) ((bytes.length >>> 8) & 0xFF));
         byteBuffer.put((byte) ((bytes.length >>> 0) & 0xFF));

@@ -21,6 +21,7 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.caffinitas.ohc.*;
 import org.caffinitas.ohc.histo.EstimatedHistogram;
+import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 
 import java.util.*;
@@ -35,7 +36,9 @@ import java.util.function.Supplier;
  */
 @Slf4j
 @Data
-public abstract class AbstractOffHeapCache<K, V> implements OffHeapCache<K, V>, InitializingBean {
+public abstract class AbstractOffHeapCache<K, V> implements OffHeapCache<K, V>, InitializingBean, DisposableBean {
+
+    private ScheduledExecutorService internalExecutorService;
 
     protected volatile OHCache<K, V> cache = null;
 
@@ -64,6 +67,21 @@ public abstract class AbstractOffHeapCache<K, V> implements OffHeapCache<K, V>, 
     public void afterPropertiesSet() throws Exception {
         initConfig();
         init();
+    }
+
+    @Override
+    public void destroy() {
+        if (cache != null) {
+            try {
+                cache.close();
+                log.info("OHCache closed for cache: {}", getName());
+            } catch (Exception e) {
+                log.warn("Error closing OHCache for cache: {}", getName(), e);
+            }
+        }
+        if (internalExecutorService != null) {
+            internalExecutorService.shutdownNow();
+        }
     }
 
     /**
@@ -100,7 +118,8 @@ public abstract class AbstractOffHeapCache<K, V> implements OffHeapCache<K, V>, 
             if (executorService != null) {
                 builder.executorService(executorService);
             } else {
-                builder.executorService(Executors.newSingleThreadScheduledExecutor());
+                internalExecutorService = Executors.newSingleThreadScheduledExecutor();
+                builder.executorService(internalExecutorService);
             }
             builder.throwOOME(throwOOME);
             // if (hashAlgorighm > 0) {

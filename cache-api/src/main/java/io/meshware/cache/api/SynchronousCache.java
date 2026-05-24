@@ -17,6 +17,8 @@
 package io.meshware.cache.api;
 
 import java.util.Objects;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Synchronous Cache interface
@@ -29,6 +31,8 @@ import java.util.Objects;
  * @author Zhiguo.Chen
  */
 public interface SynchronousCache<K, V, X, Y> extends LocalCache<K, V> {
+
+    Logger log = LoggerFactory.getLogger(SynchronousCache.class);
 
     /**
      * Get sync pair local cache storage
@@ -66,6 +70,7 @@ public interface SynchronousCache<K, V, X, Y> extends LocalCache<K, V> {
             }
             return syncValue.equals(syncValueCache.getValue(valueKey));
         } catch (Exception e) {
+            log.warn("effectiveCheck failed for key={}, treating as effective", valueKey, e);
             return true;
         }
     }

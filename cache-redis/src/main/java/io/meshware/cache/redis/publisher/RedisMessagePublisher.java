@@ -50,8 +50,15 @@ public class RedisMessagePublisher implements CacheMessagePublisher {
     @Override
     public CompletableFuture<Void> sendDiscardCacheMessage(String channelName, String cacheName, String deleteKey) {
         CacheDiscardEntity cacheDiscard = new CacheDiscardEntity(cacheName, deleteKey);
-        stringRedisTemplate.convertAndSend(channelName, cacheDiscard.toString());
-        log.info("[Cache Discard]Send cache discard message success! channelName:{}, message:{}", channelName, cacheDiscard.toString());
+        try {
+            stringRedisTemplate.convertAndSend(channelName, cacheDiscard.toString());
+            log.info("[Cache Discard]Send cache discard message success! channelName:{}, message:{}", channelName, cacheDiscard.toString());
+        } catch (Exception e) {
+            log.error("[Cache Discard]Failed to send cache discard message! channelName:{}, message:{}", channelName, cacheDiscard.toString(), e);
+            CompletableFuture<Void> future = new CompletableFuture<>();
+            future.completeExceptionally(e);
+            return future;
+        }
         return CompletableFuture.completedFuture(null);
     }
 }

@@ -52,7 +52,7 @@ public class KryoObjectSerializer<T> implements CacheSerializer<T> {
 
     @Override
     public T deserialize(ByteBuffer byteBuffer) {
-        byte[] bytes = new byte[byteBuffer.capacity()];
+        byte[] bytes = new byte[byteBuffer.remaining()];
         byteBuffer.get(bytes);
         return KryoSerializationUtils.deserialize(bytes, clazz);
     }

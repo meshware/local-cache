@@ -107,8 +107,7 @@ public class ProtostuffSerializationUtils {
             } else {
                 Schema<T> schema = RuntimeSchema.getSchema(clazz, STRATEGY);
                 T obj = schema.newMessage();
-                // T obj = clazz.newInstance();
-                ProtostuffIOUtil.mergeFrom(byteBufferInputStream, obj, schema);
+                ProtostuffIOUtil.mergeFrom(byteBufferInputStream, obj, schema, linkedBuffer);
                 return obj;
             }
         } finally {

@@ -17,6 +17,7 @@
 package io.meshware.cache.ohc.serializer;
 
 import org.caffinitas.ohc.CacheSerializer;
+import org.springframework.util.Assert;
 
 import java.nio.ByteBuffer;
 
@@ -32,6 +33,7 @@ public class IntegerSerializer implements CacheSerializer<Integer> {
 
     @Override
     public  void serialize(Integer integer, ByteBuffer byteBuffer) {
+        Assert.notNull(integer, "Integer to serialize must not be null!");
         byteBuffer.putInt(integer);
     }
 

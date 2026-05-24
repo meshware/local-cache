@@ -41,9 +41,19 @@ public class RedisMessageSubscriber extends AbstractCacheSyncManager implements 
 
     @Override
     public void onMessage(final Message message, final byte[] pattern) {
-        log.info("Received channel:{}, message:{}", new String(message.getChannel(), StandardCharsets.UTF_8), message.toString());
-        CacheDiscardEntity cacheDiscard = JSON.parseObject(message.toString(), CacheDiscardEntity.class);
-        doCacheDiscard(cacheDiscard);
+        try {
+            String channel = new String(message.getChannel(), StandardCharsets.UTF_8);
+            String body = message.toString();
+            log.info("Received channel:{}, message:{}", channel, body);
+            CacheDiscardEntity cacheDiscard = JSON.parseObject(body, CacheDiscardEntity.class);
+            if (cacheDiscard == null) {
+                log.warn("Failed to parse cache discard message from channel={}, body={}", channel, body);
+                return;
+            }
+            doCacheDiscard(cacheDiscard);
+        } catch (Exception e) {
+            log.error("Error processing Redis cache discard message", e);
+        }
     }
 
     /**

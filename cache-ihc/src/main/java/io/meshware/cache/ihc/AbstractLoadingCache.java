@@ -19,7 +19,7 @@ package io.meshware.cache.ihc;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.CacheLoader;
 import com.github.benmanes.caffeine.cache.LoadingCache;
-import lombok.Data;
+import lombok.Getter;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 
@@ -31,7 +31,7 @@ import java.util.function.Supplier;
  * @author Zhiguo.Chen
  */
 @Slf4j
-@Data
+@Getter
 @Accessors(chain = true)
 public abstract class AbstractLoadingCache<K, V> extends AbstractCaffeineCache<K, V> {
 
@@ -40,17 +40,21 @@ public abstract class AbstractLoadingCache<K, V> extends AbstractCaffeineCache<K
      */
     private volatile LoadingCache<K, V> cache = null;
 
+    private void setCache(LoadingCache<K, V> cache) {
+        this.cache = cache;
+    }
+
     /**
      * Init cache instance
      */
     @Override
     protected synchronized void init() {
-        cache = buildCaffeine().build(new CacheLoader<K, V>() {
+        LoadingCache<K, V> built = buildCaffeine().build(new CacheLoader<K, V>() {
             @Override
             public V load(K key) throws Exception {
                 if (log.isInfoEnabled()) {
                     log.info("Loading data, cache name={}, current key={}, current cache estimatedSize={}, max size={}",
-                            getName(), key, cache.estimatedSize(), maxSize);
+                            getName(), key, cache != null ? cache.estimatedSize() : 0, maxSize);
                 }
                 return getValueWhenExpired(key);
             }
@@ -63,6 +67,7 @@ public abstract class AbstractLoadingCache<K, V> extends AbstractCaffeineCache<K
                 return getValueWhenRefresh(key, oldValue);
             }
         });
+        cache = built;
         //Init cache
         initCache(cache);
     }

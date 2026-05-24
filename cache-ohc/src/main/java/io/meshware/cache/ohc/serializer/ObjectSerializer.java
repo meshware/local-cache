@@ -52,7 +52,7 @@ public class ObjectSerializer<T> implements CacheSerializer<T> {
 
     @Override
     public T deserialize(ByteBuffer byteBuffer) {
-        byte[] bytes = new byte[byteBuffer.capacity()];
+        byte[] bytes = new byte[byteBuffer.remaining()];
         byteBuffer.get(bytes);
         return (T) SerializationUtils.deserialize(bytes);
     }

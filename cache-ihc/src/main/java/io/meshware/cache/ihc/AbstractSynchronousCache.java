@@ -17,7 +17,7 @@
 package io.meshware.cache.ihc;
 
 import io.meshware.cache.api.SynchronousCache;
-import lombok.Data;
+import lombok.Getter;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 
@@ -30,7 +30,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * @author Zhiguo.Chen
  */
 @Slf4j
-@Data
+@Getter
 @Accessors(chain = true)
 public abstract class AbstractSynchronousCache<K, V, X, Y> extends AbstractLoadingCache<K, V>
         implements SynchronousCache<K, V, X, Y> {

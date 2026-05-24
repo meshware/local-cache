@@ -29,3 +29,6 @@ hs_err_pid*
 .idea/
 /target
 .flattened-pom.xml
+
+# Claude Code
+.claude/

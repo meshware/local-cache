@@ -53,18 +53,14 @@ public class CacheManager {
 
     public void addHandler(Cache cache, String defaultName) {
         String cacheName = StringUtils.hasText(cache.getName()) ? cache.getName() : defaultName;
-        if (!cacheMap.containsKey(cacheName)) {
-            cacheMap.putIfAbsent(cacheName, cache);
-        } else {
+        Cache existing = cacheMap.putIfAbsent(cacheName, cache);
+        if (existing != null) {
             log.error("[######]CacheName[{}] has duplicate cache bean. This cache will be ignored (invalid)! handler class={}",
                     cacheName, cache.getClass().getCanonicalName());
         }
     }
 
     public Cache getCache(String cacheName) {
-        if (cacheMap.size() == 0) {
-            init();
-        }
         return cacheMap.get(cacheName);
     }
 }

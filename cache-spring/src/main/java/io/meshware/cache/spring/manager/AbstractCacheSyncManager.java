@@ -66,8 +66,7 @@ public abstract class AbstractCacheSyncManager implements CacheMessageSubscriber
 
     @Override
     public CompletableFuture<Void> addSubscriber(Runnable runnable) {
-        pool.execute(runnable);
-        return CompletableFuture.completedFuture(null);
+        return CompletableFuture.runAsync(runnable, pool);
     }
 
     public CompletableFuture<Void> doCacheDiscard(@NonNull CacheDiscardEntity cacheDiscard) {

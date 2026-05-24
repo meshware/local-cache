@@ -17,7 +17,7 @@
 package io.meshware.cache.ihc;
 
 import com.github.benmanes.caffeine.cache.Cache;
-import lombok.Data;
+import lombok.Getter;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 
@@ -29,7 +29,7 @@ import java.util.function.Supplier;
  * @author Zhiguo.Chen
  */
 @Slf4j
-@Data
+@Getter
 @Accessors(chain = true)
 public abstract class AbstractCommonCache<K, V> extends AbstractCaffeineCache<K, V> {
 
@@ -37,6 +37,10 @@ public abstract class AbstractCommonCache<K, V> extends AbstractCaffeineCache<K,
      * Cache instance
      */
     private volatile Cache<K, V> cache = null;
+
+    private void setCache(Cache<K, V> cache) {
+        this.cache = cache;
+    }
 
     /**
      * Init cache instance

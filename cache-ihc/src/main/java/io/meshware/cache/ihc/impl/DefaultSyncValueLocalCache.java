@@ -44,6 +44,12 @@ public class DefaultSyncValueLocalCache extends AbstractCommonCache<String, Stri
     }
 
     @Override
+    protected synchronized void init() {
+        initConfig();
+        super.init();
+    }
+
+    @Override
     public void initCache(Cache<String, String> cache) {
 
     }
