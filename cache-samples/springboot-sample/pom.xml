@@ -24,6 +24,16 @@
         </dependency>
         <dependency>
             <groupId>io.meshware.cache</groupId>
+            <artifactId>cache-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.meshware.cache</groupId>
+            <artifactId>cache-ihc</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.meshware.cache</groupId>
             <artifactId>cache-redis</artifactId>
         </dependency>
         <dependency>
